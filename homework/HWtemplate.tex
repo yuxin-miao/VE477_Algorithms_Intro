@@ -1,0 +1,83 @@
+
+% Preamble
+\documentclass{assignment}
+
+% Packages
+\usepackage{minted}
+\usepackage{dsfont}
+\usepackage{colortbl}
+\usepackage[linesnumbered,ruled,longend]{algorithm2e} \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+
+\SetKwInOut{Input}{Input} \SetKwInOut{Output}{Output} \SetKwProg{Fn}{Function}{\string:}{end} \SetKwFunction{algohw}{AlgoHw}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+    \newpage
+
+	% Q1
+    \begin{homeworkProblem}
+	\begin{enumerate}
+	\item
+	Obviously $1 \leq k \leq n$, otherwise the statement would not be true. To prove, because the hash table has $n$ slots and the probability of $n$ keys to hash to any slot is equal, for each key, it has a probability of $\frac{1}{n}$ to hash to any slot. So the number of keys hash to a same slot follows a binomial distribution with parameter $n$ and $p$, where $p=\frac{1}{n}$. Then the probability for exactly k keys hash to a same plot is $$P_k = \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \binom n k.$$
+	\item The probability of a slot to have $k$ keys is $P_k$. More than one slots may have k keys, but no slots would have more than k keys. Then, $P_k' = $the probability of at least one slot has $k$ keys and other slots have no more than $k$ keys, which is \textbf{smaller or equal} to the probability that at least one slot has $k$ keys. Because we have $n$ slots, the probability of only one slot has $k$ keys is $\binom n 1 P_k = nP_k,$ and this probability is \textbf{larger or equal} to the probability that at least one slot has $k$ keys. Through this two inequality, $P_k' \leq nP_k$.
+	\item We have Stirling formula $n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n,$ and $1 \leq k\leq n$
+		\begin{equation*}
+	\begin{aligned}
+	P_k &= \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \frac{n!}{k!(n-k)!} \\
+	&\approx \frac{\sqrt{2 \pi n}\left(\frac{n}{e}\right)^n}{\sqrt{2 \pi (n-k)}\left(\frac{n-k}{e}\right)^{n-k}k!} \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \\
+	&=\sqrt{ \frac{n}{n-k}} \left(\frac{n}{n-k} \frac{n-1}{n}\right)^n \left(\frac{n-k}{e} \frac{1}{n}\frac{n}{n-1}\right)^{k} \frac{1}{\sqrt{2 \pi k}\left(\frac{k}{e}\right)^k} \\
+	& < \sqrt{ \frac{n}{2 \pi k(n-k)}}   \frac{e^{-k}}{\left(\frac{k}{e}\right)^k} \\
+	&< \frac{e^k}{k^k}
+	\end{aligned}
+	\end{equation*}
+	
+	
+	
+	\end{enumerate}
+    	
+    \end{homeworkProblem}
+    
+    
+    % Q2
+    \begin{homeworkProblem}
+
+Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an edge $e$ is decreased where $e \notin T$, $e=(u,v)$.
+
+ 
+     \begin{algorithm}[H]
+\Input{this file}
+\Output{nice algorithms in the homework} \BlankLine
+\Fn{\algohw{this file}}{
+download file\;
+open file\;
+compile file\;
+\While{not at end of this document}{
+read\; \uIf{understand}{
+go to next line\;
+current line becomes this one\; }
+\uElseIf{want to know more on algorithms in \LaTeX} {refer to \href{http://tug.ctan.org/tex-archive/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf} {algorithm2e documentation}}
+\Else {restart reading from the beginning\;} }
+\For{exercise $\leftarrow$ 1 \KwTo 7}{ \If{algorithm is requested} {
+solve the problem\;
+A[$exercise$] $\leftarrow $ write the algorithm in \LaTeX\; }
+}
+\KwRet{A} }
+\caption{Algorithms in the homework} \end{algorithm}
+    
+    \end{homeworkProblem}
+    
+    %Q3
+    \begin{homeworkProblem}
+    
+    
+    \end{homeworkProblem}
+    
+
+
+
+
+\end{document}
