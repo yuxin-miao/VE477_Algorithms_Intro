@@ -10,6 +10,10 @@
 
 
 \SetKwInOut{Input}{Input} \SetKwInOut{Output}{Output} \SetKwProg{Fn}{Function}{\string:}{end} \SetKwFunction{algohw}{AlgoHw}
+\SetKwFunction{detectCycle}{DetectCycle}
+\SetKwFunction{DynamicMST}{DynamicMST}
+\SetKwFunction{multi}{mult}
+\SetKwFunction{subset}{Knapsack}
 
 % Document
 \begin{document}
@@ -34,6 +38,27 @@
 	&< \frac{e^k}{k^k}
 	\end{aligned}
 	\end{equation*}
+	\item From the conclusion of the last problem, we could obtain $logP_k < -klogk$. Because $k$ is a positive integer, $klogk$ would increase when k increased. The lower bound of $k$ could be used and get the inequality 
+	
+	\begin{equation*}
+	\begin{aligned}
+	logP_k &< -c\frac{logn}{loglogn} \cdot log(\frac{clogn}{loglogn}) \\
+	& \leq -c\frac{logn}{loglogn}(loglogn - logloglogn) \\
+	& \leq -\frac{c}{2}logn.
+	\end{aligned}
+	\end{equation*}
+	So $P_k \leq \frac{1}{n^{c/2}}$, $P_k' \leq nP_k < \frac{n}{n^{c/2}}$. With $c = 6$, $P_k' < 1/n^2$.
+	
+	\item From the definition of expected value, denote the probability of $M=i$ as $Pr[M=i]$, $i\leq n$
+	\begin{equation*}
+	\begin{aligned}
+	E[M]&= \sum_i i \cdot Pr[M=i] = (\sum_{i\leq \frac{clogn}{loglogn}} i + \sum_{i>\frac{clogn}{loglogn}} i )\cdot Pr[M=i] \\
+	&\leq (\sum_{i\leq \frac{clogn}{loglogn}} \frac{clogn}{loglogn}  + \sum_{i>\frac{clogn}{loglogn}} n )\cdot Pr[M=i] \\
+	& \leq \frac{clogn}{loglogn}Pr(M\leq \frac{clogn}{loglogn}) + nPr(M> \frac{clogn}{loglogn})\\
+	& \leq \frac{clogn}{loglogn} +  n \cdot \frac{1}{n^{c/2}}
+	\end{aligned}
+	\end{equation*}
+	Therefore, $E(M) = \mathcal{O} (\frac{logn}{loglogn})$
 	
 	
 	
@@ -41,7 +66,7 @@
     	
     \end{homeworkProblem}
     
-    
+    \newpage
     % Q2
     \begin{homeworkProblem}
 
@@ -49,31 +74,51 @@ Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an 
 
  
      \begin{algorithm}[H]
-\Input{this file}
-\Output{nice algorithms in the homework} \BlankLine
-\Fn{\algohw{this file}}{
-download file\;
-open file\;
-compile file\;
-\While{not at end of this document}{
-read\; \uIf{understand}{
-go to next line\;
-current line becomes this one\; }
-\uElseIf{want to know more on algorithms in \LaTeX} {refer to \href{http://tug.ctan.org/tex-archive/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf} {algorithm2e documentation}}
-\Else {restart reading from the beginning\;} }
-\For{exercise $\leftarrow$ 1 \KwTo 7}{ \If{algorithm is requested} {
-solve the problem\;
-A[$exercise$] $\leftarrow $ write the algorithm in \LaTeX\; }
+\Input{$G = <V, E>$, a original MST $T$ for $G$, weight of edge $e =(u,v)\notin T$ decreased}
+\Output{a new MST $T'$} \BlankLine
+\Fn{\detectCycle{x, S, pred}} {
+
+\For{vertex i that is adjacent to x} {
+	\uIf{i is not visited} {
+	A[x] $\leftarrow$ true\;
+	add (x,i) into S\;
+		\If{detectCycle(i, S, x)} {
+			\KwRet true}
+	A[x] $\leftarrow$ false\;
+		delete (x,i) from S\;
+		}
+	\ElseIf {i $\neq$ pred}{
+		\KwRet true}
+	}
+
+	\KwRet false\;
+} 
+\Fn{\DynamicMST{G, e, T}}{
+T' $\leftarrow$ $T\cup \{e\}$\;
+ $S$ $\leftarrow$ $\emptyset$ \;
+ n $\leftarrow$ T'.size\;
+A[1..n] $\leftarrow$ a new boolean array of false \;
+A[u] $\leftarrow$ true\;
+
+		\If{detectCycle(u, S)} {
+			maxEdge $\leftarrow$ largest edge in S\;
+			delete maxEdge from T'\;
+			\KwRet{T'}
+			}
+	
+
+
 }
-\KwRet{A} }
-\caption{Algorithms in the homework} \end{algorithm}
-    
+\caption{Find MST} 
+\end{algorithm}
     \end{homeworkProblem}
+    \newpage
     
     %Q3
     \begin{homeworkProblem}
- 
-     \begin{algorithm}[H]\Input{two $n$-bits integer stored in array $num1$, $num1$ separately}
+    \begin{enumerate}
+    \item The pseudocode of the computation of sum is  
+     \begin{algorithm}[]\Input{two $n$-bits integer stored in array $num1$, $num1$ separately}
     \Output{array $result$ stores the sum of two integers} \BlankLine
 \Fn{\algohw{num1, num2}}{
 i $\leftarrow$ 0\;
@@ -93,6 +138,85 @@ result[i] $\leftarrow$ 1\;
 }
 \KwRet{result} }
 \caption{Compute Sum} \end{algorithm}
+
+
+\item  a) The pseudo-code according to the problem description is  
+    \begin{algorithm}[h!]
+    \Input{two integers $x$, $y$}
+    \Output{the product of these two integers $x,y$} 
+    \BlankLine
+\Fn{\multi{x, y}}{
+\uIf{x or y is 0} {\KwRet{0}}
+\Else{\KwRet{x $\cdot$ (y mod 2) + \multi(2x, floor(y/2))\;}}
+\KwRet{result} 
+}
+\caption{Multiplication} 
+\end{algorithm}
+\newpage
+b) 
+
+
+    \end{enumerate}
+    \end{homeworkProblem}
+    
+    
+      %Q4
+    \begin{homeworkProblem}
+    \begin{enumerate}
+\item[a.] If the time for each horse to complete the race could be recorded, \textbf{the minimum number of races is 5}. Randomly divide the 25 horses into 5 groups, through 5 races we could obtain all the time needed for each horse to complete the race.
+\item[b.] If only the rank of each race could be recorded, \textbf{the minimum number will be 7}.
+
+1) Randomly divide 25 horses into 5 groups, label as $A,B,C,D,E$, let each group have one race. Number every horse in each group as $1>2>3>4>5$, where $1$ is the fastest horse in this group.
+
+2) $4,5$ for each group would not become one of the  three fastest ones. Make the 6th race among $A1,B1,C1,D1,E1$, assume the result as $A1>B1>C1>D1>E1$. All the horses in group $D,E$ could be eliminated.
+
+3) $A1$ must be the fastest horse, $A2, B1$ might be the second fastest horse, $A3, B2,C1$ might be the third fastest horse. Make the 7th race among $A2, B1, A3, B2,C1$. Then the three fastest ones are determined. 
+    \end{enumerate}
+    \end{homeworkProblem}
+    
+    %Q5
+    \begin{homeworkProblem}
+    \begin{enumerate}
+    \item These two algorithms both might solve the Knapsack problem. This problem could have \textbf{no solution} with specific definition, i.e. $S={1,2}, n=4$. 
+    
+    If these two algorithms are defined as, every time will choose the smallest/largest item from the remaining items and taken items could not be put back, these two algorithms might fail to solve it. 
+    
+    If the taken items could be put back, they will have a higher probability to solve this problem. The implementation of fitting the knapsack with the largest item first is shown with pseudo-code. With smallest item first is almost the same, only the first input index is different and could detect no possible solution easier (i.e. when item is larger than the remaining sum, no solution if we keep change the index).
+    
+     However, if we want to get an optimal algorithm, such that with smaller time complexity and the number of elements in this subset is the smallest, neither of them is optimal. We could choose dynamic programming to find a better solution based on the such requirement.
+  
+    
+    \begin{algorithm}[]
+    \Input{a set $S$, a number $n$}
+    \Output{a subset $S'$ of $S$ such that all elements in it add up to $n$} 
+    \BlankLine
+\Fn{\subset{n, S, i, S'}}{
+\If{n $==$ 0} { \KwRet{true}}
+\If{i $==$ 0} {\KwRet{false}}
+\If{S[i-1] $>$ n} {
+\KwRet{\subset(n, S, i-1, S')}}
+\KwRet{\subset(n, S, i-1, S') $||$ \subset(n - S[i-1], S, i-1, $S' \cup \{ S[i-1]\} $)}
+
+}
+\Fn{\algohw{S,n}}{
+S $\leftarrow$ S sorted by increasing order\;
+$S' \leftarrow \emptyset$\;
+\uIf{\subset(n, S, S.size, S')} {\KwRet{S'}}
+\Else{\KwRet{$\emptyset$}}
+}
+\caption{Knapsack Problem with Greedy Algorithm (largest item first)} 
+\end{algorithm}
+
+\item If m is power of 2, such that $m=2^p, p\geq 0$, then $H(k) = k mod m$ will be the p lowest-order bits of k, part of the data will be cut. Data that different from the higher-order bits will create the same hash. 
+
+If the population of keys shares a same common factor, they will hash to a same slot. Prime number could reduce  the collisions.
+\item We could choose from three numbers $1, 5, 11$ for any number of times to have a total sum of 15. And the number of numbers should be as small as possible.
+
+Denote the sum of numbers we have chosen as $w$. 
+Based on greedy algorithm, the locally optimal choice would be choose the largest number that is smaller than $15-w$. Because in that way, the sum of numbers we need to choose will be the smallest, seems like less number will needed. Then we could have one $11$ and four $1$, 5 numbers in total. However, the globally optimal solution should be three $5$, 3 numbers in total.
+
+    
+    \end{enumerate}
     
     \end{homeworkProblem}
     
