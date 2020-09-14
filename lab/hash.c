@@ -40,15 +40,11 @@ void insert(void* hashtable, int size, int key, int value)
     newEle->value = value;
     newEle->pre = NULL;
     ele * first = table[index].first;
+    newEle->next = first;
     table[index].first = newEle;
-    if (first == NULL) {
-        newEle->next = NULL;
-    }
-    else {
+    if (first != NULL) {
         first->pre = newEle;
-        newEle->next = first;
     }
-
 }
 
 void delete(void* hashtable, int size, int key)
