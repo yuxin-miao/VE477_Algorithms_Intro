@@ -51,6 +51,7 @@ void delete(void* hashtable, int size, int key)
 {
     bucket * table = hashtable;
     ele* fir = table[key%size].first;
+    if (fir == NULL) return;
     ele* current = search(hashtable, size, key);
     if (current == fir) {
         table[key%size].first = current->next;
