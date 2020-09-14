@@ -133,7 +133,7 @@ carry $\leftarrow$ 1\;
 } 
 i $\leftarrow$ i + 1\;
 }
-\If{carry $=$ 1} {
+\If{carry $==$ 1} {
 result[i] $\leftarrow$ 1\;
 }
 \KwRet{result} }
@@ -146,14 +146,21 @@ result[i] $\leftarrow$ 1\;
     \Output{the product of these two integers $x,y$} 
     \BlankLine
 \Fn{\multi{x, y}}{
-\uIf{x or y is 0} {\KwRet{0}}
-\Else{\KwRet{x $\cdot$ (y mod 2) + \multi(2x, floor(y/2))\;}}
+\uIf{x $==$ 0 $||$ y $==$ 0} {\KwRet{0}}
+\Else{\KwRet{x $\cdot$ (y \% 2) + \multi(2x, $\lfloor$y/2$\rfloor$)\;}}
 \KwRet{result} 
 }
 \caption{Multiplication} 
 \end{algorithm}
 \newpage
-b) 
+b) From the pseudo-code, we could write the final result as 
+	\begin{equation*}
+	\begin{aligned}
+	result &= x\cdot (y \% 2) + 2x\cdot  (\lfloor y/2 \rfloor \% 2) + ... + 2^n x\cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0 \\
+	&= x \cdot \left( (y \% 2) + 2 \cdot (\lfloor y/2 \rfloor \% 2) + ... +  2^n \cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0\right).
+	\end{aligned}
+	\end{equation*}
+From the procedure that converting a decimal number to a binary number, we could know that $y = (y \% 2) + 2 \cdot (\lfloor y/2 \rfloor \% 2) + ... +  2^n \cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0$, so $result = x \cdot y$, this algorithm is correct.
 
 
     \end{enumerate}
