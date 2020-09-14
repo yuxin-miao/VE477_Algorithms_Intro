@@ -1,7 +1,6 @@
 #ifndef DICTIONARY_DICTIONARY_H
 #define DICTIONARY_DICTIONARY_H
 
-// sorted double link lists
 void *initializer();
 // EFFECT: Initialize an empty dictionary
 
@@ -25,9 +24,6 @@ void *predecessor(void* dictionary, int key);
 
 void *successor(void* dictionary, int key);
 // EFFECT: retrieve the pointer to the element(key-value pair) just after a given key
-
-void free_dict(void* dictionary);
-// EFFECT: free the memory allocated for this dictionary
 
 int getkey(void* element);
 // EFFECT: Given a pointer to the element, return the key
