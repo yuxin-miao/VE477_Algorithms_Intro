@@ -30,6 +30,11 @@ void insert(void* hashtable, int size, int key, int value)
 {
     bucket * table = hashtable;
     int index = key % size;
+    ele* current = search(hashtable, size, key);
+    if (current) {
+        current->value = value;
+        return;
+    }
     ele * newEle = (ele*)malloc(sizeof(ele));
     newEle->key = key;
     newEle->value = value;
