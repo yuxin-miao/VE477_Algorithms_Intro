@@ -53,12 +53,23 @@ void insert(void* hashtable, int size, int key, int value)
 
 void delete(void* hashtable, int size, int key)
 {
+    bucket * table = hashtable;
+    ele* fir = table[key%size].first;
     ele* current = search(hashtable, size, key);
+    if (current == fir) {
+        table[key%size].first = NULL;
+        free(current);
+        return;
+    }
     if (current) {
-        ele* preCurr = current->pre;
-        ele* afterCurr = current->next;
-        preCurr->next = afterCurr;
-        afterCurr->pre = preCurr;
+        if (current->pre) {
+            ele* preCurr = current->pre;
+            preCurr->next = current->next;
+        }
+        if (current->next) {
+            ele* afterCurr = current->next;
+            afterCurr->pre = current->pre;
+        }
         free(current);
     }
 }
