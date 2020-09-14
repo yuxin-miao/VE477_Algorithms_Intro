@@ -1,0 +1,8 @@
+7
+5
+insert 15 11
+delete 23
+search 22
+search 15
+insert 21 24
+
