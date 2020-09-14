@@ -58,8 +58,6 @@ void delete(void* hashtable, int size, int key)
     ele* current = search(hashtable, size, key);
     if (current == fir) {
         table[key%size].first = NULL;
-        free(current);
-        return;
     }
     if (current) {
         if (current->pre) {
