@@ -53,7 +53,7 @@ void delete(void* hashtable, int size, int key)
     ele* fir = table[key%size].first;
     ele* current = search(hashtable, size, key);
     if (current == fir) {
-        table[key%size].first = NULL;
+        table[key%size].first = current->next;
     }
     if (current) {
         if (current->pre) {
