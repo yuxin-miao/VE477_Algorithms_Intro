@@ -541,3 +541,4 @@ modules.xml
 # End of https://www.toptal.com/developers/gitignore/api/clion+all# End of https://www.toptal.com/developers/gitignore/api/latex
 .DS_Store
 *.bz2
+*.zip
