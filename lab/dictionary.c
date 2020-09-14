@@ -67,6 +67,7 @@ void insert(void *dictionary, int key, int value) {
             return;
         }
         if (key == fir->key) {
+            free(newEle);
             fir->value = value;
             return;
         }
