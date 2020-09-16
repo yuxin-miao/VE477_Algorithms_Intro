@@ -70,7 +70,7 @@
     % Q2
     \begin{homeworkProblem}
 
-Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an edge $e$ is decreased where $e \notin T$, $e=(u,v)$.
+Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an edge $e$ is decreased where $e \notin T$, $e=(u,v)$. When add $e$ into the original MST, a cycle will be created and the new MST could be found after delete the edge with the largest weight in this cycle.
 
  
      \begin{algorithm}[H]
@@ -79,12 +79,12 @@ Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an 
 \Fn{\detectCycle{x, S, pred}} {
 
 \For{vertex i that is adjacent to x} {
-	\uIf{i is not visited} {
-	A[x] $\leftarrow$ true\;
+	\uIf{!A[i]} {
+	A[i] $\leftarrow$ true\;
 	add (x,i) into S\;
 		\If{detectCycle(i, S, x)} {
 			\KwRet true}
-	A[x] $\leftarrow$ false\;
+	A[i] $\leftarrow$ false\;
 		delete (x,i) from S\;
 		}
 	\ElseIf {i $\neq$ pred}{
@@ -99,13 +99,17 @@ T' $\leftarrow$ $T\cup \{e\}$\;
  n $\leftarrow$ T'.size\;
 A[1..n] $\leftarrow$ a new boolean array of false \;
 A[u] $\leftarrow$ true\;
-
-		\If{detectCycle(u, S)} {
-			maxEdge $\leftarrow$ largest edge in S\;
-			delete maxEdge from T'\;
+detectCycle(u, S)\;
+maxEdge.weight $\leftarrow$ 0 \;
+\For {edge in S}{
+	\If{edge.weight $>$ maxEdge.weight} {
+		maxEdge $\leftarrow$ edge\;
+	}
+}
+			
+			 T' $\leftarrow$ T' - \{maxEdge\} \;
 			\KwRet{T'}
-			}
-	
+			
 
 
 }
@@ -160,7 +164,8 @@ b) From the pseudo-code, we could write the final result as
 	&= x \cdot \left( (y \% 2) + 2 \cdot (\lfloor y/2 \rfloor \% 2) + ... +  2^n \cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0\right).
 	\end{aligned}
 	\end{equation*}
-From the procedure that converting a decimal number to a binary number, we could know that $y = (y \% 2) + 2 \cdot (\lfloor y/2 \rfloor \% 2) + ... +  2^n \cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0$, so $result = x \cdot y$, this algorithm is correct.
+We could find that $(\lfloor y/2^n \rfloor \% 2)$ would be same as shift left $(y << n)$ in binary system and it is the digit $0/1$ on the $n_{th}$ bit, from the procedure that converting a binary number to a decimal number, 
+we could know that $y = (y \% 2) + 2 \cdot (\lfloor y/2 \rfloor \% 2) + ... +  2^n \cdot (\lfloor y/2^n \rfloor \% 2) + ... + 0$, so $result = x \cdot y$, this algorithm is correct.
 
 
     \end{enumerate}
@@ -187,6 +192,18 @@ From the procedure that converting a decimal number to a binary number, we could
     \item These two algorithms both might solve the Knapsack problem. This problem could have \textbf{no solution} with specific definition, i.e. $S={1,2}, n=4$. 
     
     If these two algorithms are defined as, every time will choose the smallest/largest item from the remaining items and taken items could not be put back, these two algorithms might fail to solve it. 
+    \begin{enumerate}
+    \item[•] Choose the smallest item: 
+    
+    $S = {3, 5}, n = {10}$, we would choose two $3$ and could not solve it. Correct: choose two 5.
+    
+    \item[•] Choose the largest item
+    
+    $S = {9, 5}, n = {10}$ we would choose one $9$ and fail to solve it. Correct: choose two 5.
+    \end{enumerate}
+    
+    
+    
     
     If the taken items could be put back, they will have a higher probability to solve this problem. The implementation of fitting the knapsack with the largest item first is shown with pseudo-code. With smallest item first is almost the same, only the first input index is different and could detect no possible solution easier (i.e. when item is larger than the remaining sum, no solution if we keep change the index).
     
