@@ -59,15 +59,45 @@ Each item is compared against others to determine its order
 - each item is put into predifined “bins”, independent of other items; no comparison with other items needed
 - Counting sort / bucket sort / radix sort
 
+#### Counting sort
+
+> Assume that the input consists of data in a small range
+
+给定array，已知其中data range为（0，k） + length of the array $A$ N (k and N are both parameters, although known, not treated as constant)
+
+1. allocate a new array $count$ with size k+1
+2. store the number of each number in the original array $A$ in $count$
+3. Sum all number from $0$ to $k$ in $count$ as $count[i] = count[i] + count[i-1]$ 
+4. from the end of $A$,  put each element in $A[n]$ in the new array at the position $count[A[n]]$, then $count[A[n]] -=1 $
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918175945944.png" alt="image-20200918175945944" style="zoom:33%;" />
+
+#### Bucket sort
+
+> Assume that the input is drawn from a uniform distribution, then linear time complexity $ \mathcal{O}(n)$could be obtained. (the time complecity is relevant to the input)
+
+1. set an array as an initially empty bucket 
+2. Go over the array, put each item into corresponding bucket
+3. in each bucket, do comparison sort
+4. visit all the buckets in order and put all items back to the original array 
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918182720630.png" alt="image-20200918182720630" style="zoom:33%;" />
+
+#### Radix sort
+
+> 比如sort name, 因为姓氏的集中性，not good for it
+
+each element in the n-element array $A$ has $d$ digits, where digit 1 is the lowest-order digit and digit $d$ is the highest order.
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918184344405.png" alt="image-20200918184344405" style="zoom:33%;" />
+
+
+
 
 
 In-place and not in-place both merge sort each subarray recursively, the difference is in the `merge`  function. For the marge sort discussed in the class, $$\leq $$ is used to compare so that it is stable. 
 
 In-place merge sort need to shift all the element because no additional memory (like the additional array in slides), so time complexity $$O(n^2)$$ not $$O(nlogn)$$ any more. 
-
-
-
-
 
 ## Dynamic Programming
 
