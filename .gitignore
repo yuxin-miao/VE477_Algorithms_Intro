@@ -544,3 +544,6 @@ modules.xml
 *.zip
 hash
 HWtemplate.pdf
+in.txt
+main
+lab/lab2 /main.dSYM

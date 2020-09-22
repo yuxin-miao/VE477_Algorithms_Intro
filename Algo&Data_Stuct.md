@@ -22,6 +22,13 @@
 - merge sort 
 - Quick sort 
 
+### Counting inversions 
+
+1. divide into 2 sets 
+2. in each set, recursively count the number of inversions 
+3. sort each sort
+4. when merge, as need to compre the number, could get the number
+
 ## Sorting
 
 A sorting algorithm that is based on pairwise comparisons mush use $\Omega (NlogN)$ operations to sort in the worst case
