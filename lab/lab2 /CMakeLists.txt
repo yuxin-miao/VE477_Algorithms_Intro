@@ -3,5 +3,5 @@ project(lab2)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(prim main.c)
+add_executable(prim prim.c)
 add_executable(kru kruskal.c)

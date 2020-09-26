@@ -4,25 +4,68 @@
 
 ![image-20200915132328058](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200915132328058.png)
 
+1+2+4+8+…+2^{log n} $\approx$ 2n-1. Thus, the time complexity is $\Theta(n)$.
+
+Running time is expressed as T(n) for some function T on input size n.
+
+$T(n)\in O(f(n))$ also $T(n)= O(f(n))$
+
+### complexity theory
+
+1. RAM model 
+
+   ![image-20200924095457385](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200924095457385.png)
+
+The complexity of an algorithm is defined by a numerical function
+
+2. $\mathcal{O}$
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925120901038.png" alt="image-20200925120901038" style="zoom:50%;" />
+
+A sufficient condition of Big-Oh
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130630096.png" alt="image-20200925130630096" style="zoom:33%;" />
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130715821.png" alt="image-20200925130715821" style="zoom:33%;" />![image-20200925130730523](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130730523.png)
+
+
+
+> ？
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925165500558.png" alt="image-20200925165500558" style="zoom:33%;" />
+
+
+
+3. $\Omega$
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925120943159.png" alt="image-20200925120943159" style="zoom:50%;" />
+
+4. $\Theta$
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925121016271.png" alt="image-20200925121016271" style="zoom:50%;" />
+
+
+
 ### Solve Recurrence
 
 **Master method:** $T(n) \leq aT(\frac{n}{b}) + O(n^d)$
 
-- base case: for sufficiently small $n$, $T(n) < constant$
+- base case: for sufficiently small $n$, $T(n) \leq constant$
 - a = number of recursive calls (positive integer)
 - b = input size shrinking factor (positive integer)
 - $O(n^d)$: the runtime of merging solutions. d is a real value $\geq $ 0
 - a, b, d : independent of n
 - ![image-20200917083956683](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200917083956683.png)
-   	1. In merge sort, a=2, b=2, d=1
-   	2. in binary search, a=1, b=2, d=0
+    1. In merge sort, a=2, b=2, d=1
+    2. in quick sort, if choose the median as the pivot, a=2,b=2,d=1
+    3. in binary search, a=1, b=2, d=0
 
 ## Divide-and-conquer Approach
 
 - merge sort 
 - Quick sort 
 
-### Counting inversions 
+### Counting inversions
 
 1. divide into 2 sets 
 2. in each set, recursively count the number of inversions 
@@ -59,7 +102,38 @@ Each item is compared against others to determine its order
 
 
 
-​	
+#### Simple sorts 
+
+1. insertion sort
+2. selection sort
+3. bubble sort
+
+Fast sort: quick sort and merge
+
+#### Quick Sort
+
+select a pivot **randomly**
+
+1. worst case $\mathcal{O}(n^2)$: 每次都选到了最大/最小的元素
+
+出现可能$\frac{2^{n-1}}{n!}$ - extremely samll 
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925090935239.png" alt="image-20200925090935239" style="zoom:50%;" />
+
+2. On average  $\mathbb{\theta}(n)$
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925140748192.png" alt="image-20200925140748192" style="zoom:33%;" />
+
+how to do partition? Not in place: with another array B
+
+**in-place partition**
+
+	1. once select a pivot, swap the pivot with the first element in the array 
+ 	2. set two pointer i,j; i points to the second element in the array, i = 1; j points to the last elemtn j = N - 1
+ 	3. Then increment i until find A[i] >= pivot
+ 	4. decrease j until find A[j] < pivot
+ 	5. if i < j : swap A[i] and A[j] the go back to 3.  
+ 	6. otherwise swap the first element (the pivot) with A[j]
 
 ### Non-comparison Sort / distribution-based sort
 
@@ -105,6 +179,111 @@ each element in the n-element array $A$ has $d$ digits, where digit 1 is the low
 In-place and not in-place both merge sort each subarray recursively, the difference is in the `merge`  function. For the marge sort discussed in the class, $$\leq $$ is used to compare so that it is stable. 
 
 In-place merge sort need to shift all the element because no additional memory (like the additional array in slides), so time complexity $$O(n^2)$$ not $$O(nlogn)$$ any more. 
+
+## LinearTime Selection
+
+### Randomized selection algorithm
+
+![image-20200925084333747](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925084333747.png)
+
+**Average** :
+
+Input array size n && **random pivot choice** 
+
+*Rselect is in phase j*: current array size is between $(\frac{3}{4})^{j+1}n$ and $(\frac{3}{4})^{j}n$. 
+
+*$X_j$*: the number of recursive calls in phase $j$
+
+> For example, phase 0 is size between [3/4n, n]. Depends on what the pivot you choose, the array may enter a new phase or remain in the current phase
+>
+> Good pivot: make the left sub-array size is am, i.e. 1\4<a<3\4. Probability: 0.5. 因为只要在old array中间50%的位置取即可获得
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925093853343.png" alt="20200925093853343.png" style="zoom:33%;" />
+
+
+
+E[$X_j$]≤ Expected number of times you need to get a good pivot, p=0.5, == flip coin
+
+> 小于：因为即使无good pivot也可能进入new phase
+
+N: the number of chosen needed to get a good pivot. P[N=k] = $\frac{1}{2^k}$;  E[N]=2. 
+
+E[$X_j$] <= E[N] = 2
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925095103847.png" alt="image-20200925095103847" style="zoom:33%;" />
+
+> 第一层循环中将pivot与n个元素进行比较，时间为$cn$.: 第一步时间 $T(n)=cn+T(n/2)$
+>
+> 相似的，在递归过程中$T(n/2)=c(n/2) + T(n/4); \ T(n/4)=c(n/4) + T(n/8)…\ T(2) = 2*c+T(1); \ T(1)=1*c$
+>
+> 则有$T(n) = c(n+n/2+n/4+…+2+1) = 2n = O(n)$
+>
+> 空间复杂度：无额外的空间，inplace $\mathcal{O}(1)$
+
+
+
+The runtime depends on the input pivot 
+
+When i = n/2 ,the **worst** case runtime is  $\mathcal{\Theta}(n^2)$, such that example array 1,2,3,4,5,6,7, choose pivot sequence 1,2,3,7,6,5,4 then comparison time:  c(n-1 + n-2 + … + n/2 + … 1). However, if choose 1,2,3,4,5,6,7, only c(n-1 + n-2 + … + n/2 ) 
+
+**Best:**
+
+Best case happens when your random selection of pivot directly gives you the i-th smallest item (i.e., a pivot with index as i). However, the pivot index can only be known after the partition. Thus, the runtime is $\mathcal{\Theta}(n)$.
+
+
+
+### Deterministic selection algorithm
+
+Idea: use “median of medians”
+
+**ChoosePivot(A, n)**
+
+- A subroutine called by the deterministic selection algorithm
+
+- Steps
+
+​	1.Break A into n/5 groups of size 5 each
+
+​	2.Sort each group (e.g., use insertion sort)
+
+​	3.Copy n/5 medians into new array C
+
+​	4.Recursively compute median of C
+
+		By calling the deterministic selection algorithm!
+
+​	5.Return the median of C as pivot
+
+**Dselect**
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925095542348.png" alt="image-20200925095542348" style="zoom:70%;" />
+
+Intpu array size n; Runs on $\mathcal{O}(n)$ time 
+
+but not in-place: need an additional array of 5/n medians 
+
+- 对于长度为5的array排序，时间为constant，
+
+- why size <= 0.7n
+- <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925102033806.png" alt="image-20200925102033806" style="zoom:33%;" />
+
+于是可以看出在图中T(?)处的size不会大于0.7n
+
+因此对于整个dselect来说，
+
+Hope: there is a constant a (independent of n) such that T(n)≤an for all n>1
+
+​		Then T(n)=O(n)
+
+We choose a=10c, so to prove ->
+
+Proof by induction:
+
+- base case: $T(1) \leq 10c$
+
+- inductive step: inductive hypothesis $T(k) \leq 10ck, \forall\ k<n$
+
+  ​	Then prove it also true for $T(n)$ : $T(n) \leq cn+T(\frac{5}{n}) + T(\frac{7n}{10}) \leq cn+2cn+7cn = 10cn$
 
 ## Dynamic Programming
 
