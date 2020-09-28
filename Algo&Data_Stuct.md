@@ -313,7 +313,7 @@ DP: 枚举有可能成为答案的解，自带剪枝 - 尽量缩小可能解空�
 
 
 
-## union-find 
+## Union-Find
 
 A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_structure)* is a data structure that keeps track of a set of elements partitioned into a number of disjoint (non-overlapping) subsets. A [*union-find algorithm*](http://en.wikipedia.org/wiki/Disjoint-set_data_structure) is an algorithm that performs two useful operations on such a data structure:
 
@@ -328,6 +328,50 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 - When `Find`, update all the nodes along the path (all link them to the root directly)
 - When `Union`, set the root with higher depth as the parent of another root (minimize the depth of the tree) 
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102034381.png" alt="image-20200927102034381" style="zoom:33%;" />
+
+**Complexity**
+
+- Lemma <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102643009.png" alt="image-20200927102643009" style="zoom:33%;" />
+
+- *iterated logarithm* function <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927103159560.png" alt="image-20200927103159560" style="zoom:33%;" />
+
+  such that, the iterated algorithm of n is the number of time that the function need to applied to obtain a number smaller than  2
+
+## Ackerman’s function
+
+**inverse Ackerman’s function**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## MST (Minimum Spnning Tree)
 
@@ -361,7 +405,7 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
    - Remove $v$ from set $T'$
    - For $v’s$ neighbors $u$ that still in $T’$, if exist $D(u)>w(v,u)$, then update $D(u)$ as $w(v,u)$  and $P(u)$ as $v$
 
-   **b. Krustal’s Algorithm** 
+   **b. Kruskal’s Algorithm** 
 
    Greedy Algorithm, union-find data structure 
 
@@ -369,6 +413,12 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
    - for edges in $G.E$ in non-decreasing order, adding them into $T$ if no cycle would be created 
 
    To check whether a cycle will be created, union find: whether two edges have the same root `Find` ; add them: `Union`
+
+## Algo. Examples
+
+### Stable Marriage Problem
+
+Algorithm: Gale-Shapley
 
 
 

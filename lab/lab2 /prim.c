@@ -10,7 +10,7 @@ struct node_t {
     int v1; int v2;
 };
 
-int cmp (const void*a, const void*b) {
+int cmp (const void*a, const void*b) { // compare function for qsort, to output in correct order
     node* n1 = (node*) a;
     node* n2 = (node*) b;
     if (n1->v1 < n2->v1) return -1;
@@ -31,6 +31,7 @@ void printGraph(int vNum, const int parent[]) {
     free(nodes);
 }
 
+// find the minimum distance among not added node
 int minDis(const int distance[], const bool added[], int vNum) {
     int minimum = INT_MAX;
     int index = 0;
@@ -49,13 +50,13 @@ void primMST(int** graph, int vNum) {
         distance[i] = INT_MAX;
         added[i] = false;
     }
-    distance[0] = 0; added[0] = true; parent[0] = -1;
+    distance[0] = 0; added[0] = true; parent[0] = -1; // add the first element
     for (int i = 0; i < vNum - 1; i++) {
         int v = minDis(distance, added, vNum);
-        added[v] = true;
+        added[v] = true; // add the node with minimum distance
         for (int u = 0; u < vNum; ++u) {
             if (graph[v][u] && !added[u] && distance[u] > graph[u][v]){
-                parent[u] = v;
+                parent[u] = v; // update
                 distance[u] = graph[u][v];
             }
         }
@@ -79,5 +80,5 @@ int main (){
     for (int i = 0; i < vNum; i++) free(graph[i]);
     free(graph);
 
-
+    return 0;
 };

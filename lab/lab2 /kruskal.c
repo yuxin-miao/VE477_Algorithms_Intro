@@ -43,6 +43,7 @@ void addEdge(Graph* graph, int E) {
 }
 
 int compare(const void * a, const void * b){
+    // compare function to sort the edge according to weight
     Edge * e1 = (Edge*) a;
     Edge * e2 = (Edge*) b;
     if (e1->wt > e2->wt) return 1;
@@ -50,20 +51,24 @@ int compare(const void * a, const void * b){
     else return 0;
 }
 int vertexCom(const void*a, const void*b) {
+    // compare function to sort the vertex
     Edge* e1 = (Edge*)a;
     Edge* e2 = (Edge*)b;
     if (e1->v1 < e2->v1) return -1;
     else if (e1->v1 > e2->v1) return 1;
     else return e1->v2 > e2->v2;
 }
+
+// Union-Find data structure
 int Find(Node* nodes, int i) {
     if (nodes[i].parent != i)
-        nodes[i].parent = Find(nodes, nodes[i].parent);
+        nodes[i].parent = Find(nodes, nodes[i].parent); // update parent among the path
     return nodes[i].parent;
 }
 void Union(Node* nodes, int x, int y){
     int xRoot = Find(nodes, x);
     int yRoot = Find(nodes, y);
+    // make the node with lower rank as the parent
     if (nodes[xRoot].rank < nodes[yRoot].rank)
         nodes[xRoot].parent = yRoot;
     else if (nodes[xRoot].rank > nodes[yRoot].rank)
@@ -86,12 +91,13 @@ void kruskalMST(Graph* graph){
     int eTaken = 0;
     int e = 0;
     while (eTaken < graph->Vnum - 1 && e < graph->Enum) {
+        // for the edge in non-decreasing order
         Edge next = graph->edge[e++];
         int v1Root = Find(nodes, next.v1);
         int v2Root = Find(nodes, next.v2);
-        if (v1Root != v2Root) {
+        if (v1Root != v2Root) { // no cycle created
             result[eTaken++] = next;
-            Union(nodes, v1Root, v2Root);
+            Union(nodes, v1Root, v2Root); // union
         }
     }
     free(nodes);
@@ -101,12 +107,6 @@ void kruskalMST(Graph* graph){
     }
 }
 
-void destroy(Graph* graph){
-    free(graph->edge);
-    free(graph);
-}
-
-
 int main() {
     int Vnum, Enum;
     scanf("%d", &Enum);
@@ -114,7 +114,8 @@ int main() {
     Graph * graph = createGraph(Vnum, Enum);
     addEdge(graph, Enum);
     kruskalMST(graph);
-    destroy(graph);
+    free(graph->edge);
+    free(graph);
     return 0;
 }
 
