@@ -416,11 +416,119 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 ## Algo. Examples
 
+### counting inversions 
+
+数逆序对 application: voting theory / analysis of search engines ranking / collaborative filtering 
+
+Divide and conquer approach 将list分为两半，recursively sort list并记录count (sort and count). 接着将两个list (merge and count)
+
+```pseudocode
+Algorithm. (Merge and count)
+Input : Two sorted lists: L1 = (l1,1,··· ,l1,n1), L2 = (l2,1,··· ,l2,n2) 
+OutpuT: Number of inversions count, and L1 and L2 merged into L
+Function MergeCount(L1 , L2 ):
+  count ← 0; L ← ∅; i ← 1; j ← 1; 
+  whilei≤n1 andj≤n2 do
+  	if l1,i ≤ l2,j then
+  		append l1,i to L; i++;
+  	else
+  		append l2,j to L; count←count + n1 − i + 1; j++; end if
+  end while
+  if i > n1 then append l2,j,··· ,l2,n2 to L; 
+  else append l1,i,··· ,l1,n1 to L;
+  return count and L
+end
+
+Algorithm. (Sort and count)
+Input : A list L = (l1,··· ,ln)
+Output : The number of inversions count and L sorted
+
+Function SortCount(L):
+  if n=1 then return 0 and L; 
+  else
+  	Split L into L1 = (l1,··· ,l⌈n/2⌉) and L2 = (l⌈n/2⌉+1,··· ,ln); 
+  	count1, L1 ← SortCount(L1);
+  	count2, L2 ← SortCount(L2);
+  	count, L ←MergeCount(L1, L2);
+  end if
+  count ← count1 + count2 + count;
+  return count and L 
+end
+```
+
+**time complexity**: For merge O(n)
+
+sort part: every time spilt it into two equal parts, a=2, b=2, f(n) = O(n), 
+
 ### Stable Marriage Problem
 
 Algorithm: Gale-Shapley
 
 
+
+
+
+## Hashing
+
+### Basics
+
+- **Setup:** a universe $U$ of objects (eg. all names, .., very big)
+- **Goal:** maintain an evovling set $S\subseteq U$ (eg. 100 names, … ,reasonable size)
+- original solution: array based / linked list based 
+
+**Better solution**
+
+- Hash table, an array A of **n buckets** $n=c|S|$
+- hashing function $h: U \rightarrow {0,1,…,n-1}$ 
+- store item $k$ in A[h(k)]
+
+Collision: item with differnet search keys hashed into the same buckets (to solve: seperate chaining / open addressing)
+
+**Hash Function Design Criteria:**  
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200928093101940.png" alt="image-20200928093101940" style="zoom:33%;" />
+
+for non-integers: 
+
+- string: ASCII / UTF-8 encoding of each char 
+
+Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*, n is the number of buckets in the hash table. For a uniform distribution of the homebuckets, ideally choose n as a large prime number.  **BIAS:** even n -> even integers are hashed into even home buckets 
+
+### Collision Resolution
+
+1. Seperate chaining: each bucet keeps a linked list of all items whose home buckets are that buckets. Insert obkect at the beginning. 
+
+2. Open Addressing 
+
+   $need$ $L \leq 1$ (Because the buckets' number would not inrease, do not like separate chaining)
+
+   Reuse empty spaces in the hash table to hold colliding items. we use a sequence of hash functions h0, h1, h2, . . . to probe the hash table until we find an empty slot.
+
+   - linear probing: $h_i(x) = (h(x)+i)\%n$
+
+     Apply hash function $h_0, h_1,… ,$ in sequence until find the empty slot. (Equivalent to doing a **linear search from h(key)** until we find an empty slot or find the key). bucket to insert is not empty, then bucket + i (i=0,1,2,3…) until an empty bucket is found. When to **delete**, not only delete the element directly, but need to 
+
+     1. **rehash** (rehash the following “cluster” to fill the vacated bucket, but we can’t move an item **beyond** its **actual** hash position) (clustering: when contiguous buckets are all occupied. Any hash value inside the cluster adds to **the end** of that cluster.) (only stop when find an empty bucket, because the elements behind may also not in the correct bucket)
+     2. or choose **lazy deletion**: mark the empty bucket as deleted. we could insert in this deleted bucket but when searching, do not stop when find a deleted bucket (now three states empty/occupied/deleted). 
+
+   - quadratic probing:  $h_i(x) = (h(x)+i^2) \% n $
+
+     less likely to form a large cluster. however sometimes we can’t find the empty slot even though the table isn’t full. 
+
+     - load factor $L=\frac{m}{n} = \frac{\# \rm{objects \ in \ hash \ table}}{\#\rm{buckets \ in \ hash \ table}} $, when $L \leq 0.5$, we are guaranteed to find an empty slot
+
+     <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200928104611394.png" alt="image-20200928104611394" style="zoom:50%;" />
+
+     
+
+   - double hashing: $h_i(x) = (h(x)+i*g(x)) \% n $
+
+     increment differently depending on the key, use two distinct hash function 
+
+   **Performance of open addressing**: runtime dominated by the number of comparisons, depends on the load factor. (both need to call `find`). define the number of comparison in unsuccessful search as $U(L)$, in successfule search as $S(L)$. 
+
+   - linear probing: $U(L)= \frac{1}{2}[1 + (\frac{1}{1-L})^2]$, $S(L)= \frac{1}{2}[1 + (\frac{1}{1-L})]$
+   - quadratic probing and double hashing: $U(L)= \frac{1}{1-L}$, $S(L)= \frac{1}{L}[ln\frac{1}{1-L}]$
 
 ## Binary Search Tree
 
