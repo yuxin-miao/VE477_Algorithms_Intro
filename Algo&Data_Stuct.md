@@ -375,6 +375,8 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 ## MST (Minimum Spnning Tree)
 
+> Implement: lab2
+
 1. Definitions
 
 - **tree**: acyclic, connected undirected graph; $|E| = |V| - 1$ 
@@ -416,7 +418,9 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 ## Algo. Examples
 
-### counting inversions 
+### counting inversions
+
+> implement: VE477  lab3.1.1
 
 数逆序对 application: voting theory / analysis of search engines ranking / collaborative filtering 
 
