@@ -182,11 +182,16 @@ so $g(n) = \Omega(f(n))$. Therefore, $g(n) = \Theta(f(n))$.
 	\end{aligned}
 	\right.
 \end{align*}
-where i is a positive integer. Then from the conclusion we obtained,
+where i is a positive integer. Then from the conclusion we obtained, 
+\begin{enumerate}
+\item[•] $f(n) = \Theta(n^{log_ba})$, $T(n) = g(n) + \mathcal{O}(n^{log_bn}) = \mathcal{O}(n^{log_bn} log_bn)+\mathcal{O}(n^{log_bn}) = \mathcal{O}(n^{log_bn}log_bn)$
+\item[•] when $f(n) = O(n^{log_ba- \varepsilon})$, same procedure as above.
+\item[•] $f(n) \geq  \frac{a}{c}f(n/b)$, because $f(n) = \Omega(n^{log_ba+ \varepsilon})$, take $g(n) = \Theta(f(n))$ only.
+\end{enumerate}
 \begin{align*}
 	T(n) = \left\{
 	\begin{aligned}
-	&\Theta(n^{log_ba}) \ \ & f(n) &= \Theta(n^{log_ba})\\
+	&\Theta(n^{log_ba} log_bn) \ \ & f(n) &= \Theta(n^{log_ba})\\
 	& \Theta(n^{log_ba})\ \ \  & f(n) &= O(n^{log_ba- \varepsilon}) \\
 	& \Theta(f(n))\ \  & f(n) &\geq  \frac{a}{c}f(n/b)
 	\end{aligned}

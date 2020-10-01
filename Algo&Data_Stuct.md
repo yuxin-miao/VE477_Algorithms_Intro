@@ -428,14 +428,14 @@ Input : Two sorted lists: L1 = (l1,1,··· ,l1,n1), L2 = (l2,1,··· ,l2,n2)
 OutpuT: Number of inversions count, and L1 and L2 merged into L
 Function MergeCount(L1 , L2 ):
   count ← 0; L ← ∅; i ← 1; j ← 1; 
-  whilei≤n1 andj≤n2 do
+  while i≤n1 andj≤n2 do
   	if l1,i ≤ l2,j then
   		append l1,i to L; i++;
   	else
   		append l2,j to L; count←count + n1 − i + 1; j++; end if
   end while
   if i > n1 then append l2,j,··· ,l2,n2 to L; 
-  else append l1,i,··· ,l1,n1 to L;
+  else append l1,i,··· ,l1,n1 to counL;
   return count and L
 end
 
@@ -496,7 +496,13 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
 
 ### Collision Resolution
 
-1. Seperate chaining: each bucet keeps a linked list of all items whose home buckets are that buckets. Insert obkect at the beginning. 
+1. Seperate chaining: each bucet keeps a linked list of all items whose home buckets are that buckets. Insert obkect at the beginning. **Analysis**: n keys, m slots. uniformly distributed, load factor $\alpha$
+
+   For $j = 0,1 , … ,m-1$, denote the length of the list $T[j]$ by $n_j$, then $n = n_0 + n_1 + … n_{m-1}$. $E[n_j]=load \ factor = n/m$ 
+
+   unsuccessful search: for key $k$, search to the end of $T[h(k)]$, expected length $E[n_{h(k)}]=\alpha$, compute h(k):O(1). So total $\Theta(1 + \alpha)$
+
+   successful search: average  $\Theta(1 + \alpha)$
 
 2. Open Addressing 
 
@@ -509,6 +515,7 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
      Apply hash function $h_0, h_1,… ,$ in sequence until find the empty slot. (Equivalent to doing a **linear search from h(key)** until we find an empty slot or find the key). bucket to insert is not empty, then bucket + i (i=0,1,2,3…) until an empty bucket is found. When to **delete**, not only delete the element directly, but need to 
 
      1. **rehash** (rehash the following “cluster” to fill the vacated bucket, but we can’t move an item **beyond** its **actual** hash position) (clustering: when contiguous buckets are all occupied. Any hash value inside the cluster adds to **the end** of that cluster.) (only stop when find an empty bucket, because the elements behind may also not in the correct bucket)
+        - every time insert one element, we assume the. future “rehash” work might occur on this element
      2. or choose **lazy deletion**: mark the empty bucket as deleted. we could insert in this deleted bucket but when searching, do not stop when find a deleted bucket (now three states empty/occupied/deleted). 
 
    - quadratic probing:  $h_i(x) = (h(x)+i^2) \% n $
@@ -527,8 +534,35 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
 
    **Performance of open addressing**: runtime dominated by the number of comparisons, depends on the load factor. (both need to call `find`). define the number of comparison in unsuccessful search as $U(L)$, in successfule search as $S(L)$. 
 
+   - Unsuccessful search: every probe but the last access an occupied slot without desired key, and the last probe access an empty slot.
+
+   -  **X**: the number of probes made in unsuccessful search. <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150127267.png" alt="image-20200930150127267" style="zoom:33%;" />
+
+     Then $E[X] = \sum_{i=1}^{\infty}Pr[X \geq i] \leq \sum_{i=1}^{\infty} \alpha^{i - 1} = \sum_{i=0}^{\infty} \alpha^{i} = \frac{1}{1-\alpha}$
+
+     intuitively $1 + \alpha + \alpha^2 + ...$
+
    - linear probing: $U(L)= \frac{1}{2}[1 + (\frac{1}{1-L})^2]$, $S(L)= \frac{1}{2}[1 + (\frac{1}{1-L})]$
+
    - quadratic probing and double hashing: $U(L)= \frac{1}{1-L}$, $S(L)= \frac{1}{L}[ln\frac{1}{1-L}]$
+
+   <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930145346318.png" alt="image-20200930145346318" style="zoom: 33%;" />![image-20200930150757482](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150757482.png)
+
+   ![image-20200930150757482](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150757482.png)
+
+### Size rehashing
+
+1. determine hash table size: 
+   - performance requirement -> maximum permissible load factor 
+   - fiexed table size -> maximum number that can be inserted 
+2. rehash 
+   - amortized analysis of rehashing: rehashing is amortized over individual inserts 
+
+Time complexity of hash table vs. sorted array 
+
+- insert(): O(1) vs. O(n)
+- find(): O(1) vs. O(n)
+- Not use hash table : rank search / sort
 
 ## Binary Search Tree
 
