@@ -313,6 +313,29 @@ DP: 枚举有可能成为答案的解，自带剪枝 - 尽量缩小可能解空�
 
 
 
+### subset sum problem
+
+time complexity $\mathcal{O}(N*sum)$
+
+- Use a boolean subset\[i]\[j] to denote if there is a subset of sum j with element at index $i-1$ as the last element.
+
+```pseudocode
+subset size: (A.size() + 1) * (target + 1)
+subset[i][j] = True
+## sum of a subset with the i-1 th element as the last element, equal to j
+
+if (A[i] > j)
+	subset[i][j] = subset[i - 1][j]  // copy the answer for previous cases
+else 
+	subset[i][j] = subset[i - 1][j] OR subset[i - 1][sum - A[i]]
+	// if any previous states have already experinced the sum=j OR 
+	// OR any previous state experinced a value 'j - A[i]'
+```
+
+STEP
+
+1. 
+
 ## Union-Find
 
 A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_structure)* is a data structure that keeps track of a set of elements partitioned into a number of disjoint (non-overlapping) subsets. A [*union-find algorithm*](http://en.wikipedia.org/wiki/Disjoint-set_data_structure) is an algorithm that performs two useful operations on such a data structure:
