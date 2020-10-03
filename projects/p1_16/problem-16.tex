@@ -10,13 +10,13 @@
 
 % only for overview, so short description (no more than 1-2 lines)
 \begin{overview}
-\item [Algorithm:] Backtracking~(algo.~\ref{alg:\currfilebase_a}), binaryCounting~(algo.~\ref{alg:\currfilebase_b})
+\item [Algorithm:] Backtracking~(algo.~\ref{alg:\currfilebase_a}), binaryCounting~(algo.~\ref{alg:\currfilebase_b}), grayCode~(algo.~\ref{alg:\currfilebase_c})
 	% -	must match the label of the algorithm 
 	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
 \item [Input:] A set of integers with length $n$
-\item [Complexity:] $\mathcal{O}(2^n)$ with Backtracking, $\mathcal{O}(n2^n)$ with binaryCounting, 
-\item [Data structure compatibility:] data structures that can be used with the algorithm; N/A if unrelated
-\item [Common applications:] most common fields where this algorithm is used
+\item [Complexity:] $\mathcal{O}(2^n)$ with Backtracking, $\mathcal{O}(n\cdot 2^n)$ with binaryCounting and grayCode
+\item [Data structure compatibility:] stack can be used with Backtracking, no specific data structure needed with binaryCounting 
+\item [Common applications:] vertex cover, knapsack, set packing \cite{1}
 \end{overview}
 
 
@@ -30,47 +30,33 @@ As specified in the overview, the input is a set of distinct integers. Although 
 
 A more general input would be a set of \textit{any type items}, such as set $\{ a, b, c\}$. As the algorithm would be same as for a set of integers, this project will use a set of integers for simpler explanation. 
 
-The output  is all the subsets of the given set $S$ with length $n$ (power set $P(S)$), so there are $2^n$ subsets in $P(S)$. For successful generating, the key is to establish a numerical sequence among all subsets and there are two primary alternatives \cite{1}
+The output  is all the subsets of the given set $S$ with length $n$ (power set $P(S)$), so there are $2^n$ subsets in $P(S)$. For successful generating, the key is to establish a numerical sequence among all subsets and there are three primary alternatives \cite{1}
 \begin{enumerate}
 \item[•] \textit{Lexicographic order}: the most intuitive order for generating combinatorial objects, as human will generally use. For example, the eight subsets of $\{ 1, 2, 3\}$ in lexicographic order would be $\{ \}, \{1\}, \{1,2\}, \{1,2,3\}, \\ \{1,3\}, \{2\}, \{2,3\}, \{3\}$. As each time we find a previous number "back", the \textbf{backtracking} algorithm will find the subset in this order. 
 
 \item[•] \textit{Binary counting}: Based on the binary number representation of the number of the subset. For example,for set $\{ 1, 2, 3\}$, the binary number representation from $0$ to $2^n-1 = 7$ would be $000, 001, 010, 011, 100, 101, 110,\\ 111$, which corresponds to $\{ \}, \{3\}, \{2\}, \{2,3\},  \{1\}, \{1,3\}, \{1,2\}, \{1,2,3\}$. As the subset could be decoded through the number from $0$ to $2^n-1 = 7$, the \textbf{binaryCoutning} algorithm would find subsets in this order. 
 
-\item[•] \textit{Gray code}: A subset sequence as the adjacent subsets differ by insertion or deletion of exactly one item. The gray code for 3-bits is  $000, 001, 011, 010, 110, 111, 101, 100$. Compared with $binary counting$, such sequence could not be obtained directly. With this sequence, generate the subsets based on this sequence will have same procedure as based on $binaryCounting$. But the total time complexity will be larger. The \textbf{grayCode} algorithm discuss how to generate such sequence.  
+\item[•] \textit{Gray code}: A subset sequence as the adjacent subsets differ by insertion or deletion of exactly one item. The gray code for 3-bits is  $000, 001, 011, 010, 110, 111, 101, 100$. Compared with $binary counting$, such sequence could not be obtained directly. With this sequence, generate the subsets based on this sequence will have same procedure as based on $binaryCounting$. 
 \end{enumerate}
 
-
-
-
-Detailed description of the problem; More detailed information on the input and complexity; more applications with details on how they relate to each other (if this is the case). Do not hardcode references,  instead use the {\tt \textbackslash label} and {\tt \textbackslash reference} commands.  Examples: citation~\cite{ve477}, a group of figures (Fig.~\ref{fig:\currfilebase_group}), a sub-figure (Fig.~\ref{fig:\currfilebase_a}). To display a new line skip a line in the source code, do not use {\tt \textbackslash\textbackslash}.
-
-
-\begin{figure}[!htb]
-	\centering
-	\subfloat[Pic. 1\label{fig:\currfilebase_a}]{\includegraphics{\currfilebase_a}}
-	\hspace{2cm} %\qquad
-	\subfloat[Pic. 2\label{fig:\currfilebase_b}]{\includegraphics{\currfilebase_b}}
-	\caption{Group of pictures}
-	\label{fig:\currfilebase_group}
-\end{figure}
 % add comment in the pseudocode: \cmt{comment}
 % define a function name: \SetKwFunction{shortname}{Name of the function}
 % use the defined function: \shortname{$variables$}
 % use the keyword ``function'': \Fn{function name}, e.g. \Fn{\shortname{$var$}}
 
 \subsubsection{Backtracking}
-
+The key idea is that with $n$ elements in the set, for each element, there are two choices: either include or exclude the element in the subset.
 \begin{Algorithm}[\textbf{Backtracking}($set$)\label{alg:\currfilebase_a}]
 \SetKwFunction{myFunc}{subsetRec}
 	\Input{A set of distinct integers $set$}
 	\Output{$result$, store all the subsets of $set$}
 	\BlankLine
 	\BlankLine
-\Fn{\myFunc{$set$,$subset$, $result$, $index$}}{
+\Fn{\myFunc{$set$, $subset$, $result$, $index$}}{
 	push $subset$ into $result$ \\
 	\For {$i$ $\leftarrow$ $index$ \KwTo  $len(set)$}{
 	push $set[i]$ into $subset$ \\
-	\myFunc{$set$,$subset$, $result$, $index+1$} \\
+	\myFunc{$set$, $subset$, $result$, $index+1$} \\
 	pop out the last element of $subset$ \cmt{exclude $set[i]$ and backtracking}\\
 	}
 	\Ret 
@@ -79,8 +65,22 @@ Detailed description of the problem; More detailed information on the input and 
 \Ret $result$
 \end{Algorithm}
 
+To analyse time complexity, because not all the sub-problems would have roughly equal size, Master methodis not applicable. The number of execution operations could be represented as 
+$$T(n) = \sum_{i=1}^{n-1} T(n-i) + c$$
+which is caused by the $for$ loop that from $0$ to $len(set)$. As each term could be expanded following the same equation such that $$T(n-1) = T(n-2) + T(n-1)+...+T(1)$$
+Then we could get 
+\begin{align*}
+T(n) &= T(n-1) + T(n-2) + ... + T(1) + c \\
+&=\left( T(n-2) + T(n-3)+ ... + T(1) + c \right) + T(n-2) + ... + T(1) + c \\
+&= 2\times T(n-1) \\
+T(n-1) &= 2\times T(n-2) \\
+&... \\
+T(2) &= 2T(1) \\
+T(1) &=T(0)
+\end{align*}
+Because the equation only differs from constant term, the equation above is acceptable. As we have $T(1) = \mathcal{O}(1)$, $$T(n) = 2^{n-1}T(1) = \mathcal{O}(2^n).$$
 
-
+This result could also be obtained by a very intuitive induction. Such that each step there are two choices and  n elements (to take both choices) in total, the time complexity should be  $\mathcal{O}(2^n)$
 \subsubsection{Binary Counting}
 The number of all subsets of a set with size $n$ is $2^n$. Binary counter approach could be used, as any unique binary string of length $n$ represent a unique subset. So we could start from $0$ and end with $2^n - 1$, and for every bit that set as 1, push the number represent by this bit into subset. 
 \begin{Algorithm}[\textbf{binaryCounting}($set$)\label{alg:\currfilebase_b}]
@@ -94,7 +94,7 @@ $subset \leftarrow [\ ]$ \\
 	\For {$bit$ $\leftarrow$ $0$ \KwTo $n$} 
 	{
 	\If{ $count \& (1 << bit)$\cmt{every time left shift 1 by $bit$}} {
-	push $set[j]$ into $subset$ \cmt{find the bit set as 1 in $count$} \\  
+	push $set[bit]$ into $subset$ \cmt{find the bit set as 1 in $count$} \\  
 	}
 	}
 	push $subset$ into $result$ \\
@@ -103,29 +103,51 @@ $subset \leftarrow [\ ]$ \\
 \Ret $result$
 \end{Algorithm}
 
+Time complexity for this algorithm is easier to analyse. The outer loop will execute for $2^n$ times and inner will execute for $n$ times. So the total time complexity is $\mathcal{O}(n\cdot 2^n)$
+
 \subsubsection{Gray Code}
+Recursion and iteration both could be used to generate gray code with given length $n$. As they have similar idea, here only the iteration method is presented. 
 
 \begin{Algorithm}[\textbf{grayCode}($set$)\label{alg:\currfilebase_c}]
+\SetKwFunction{myFunc}{IterationCode}
 	\Input{A set of distinct integers $set$}
 	\Output{$result$, store all the subsets of $set$}
 	\BlankLine
 	\BlankLine
-$n \leftarrow$ $len(set)$ \\	
-\For {$count$ $\leftarrow$ $0$ \KwTo $2^n - 1$}	{
-$subset \leftarrow [\ ]$ \\
+\Fn{\myFunc{$n$}}{
+$arr \leftarrow [[\ ]]$ \\ 
+	push $"0", "1"$ into $arr[0], arr[1]$ \cmt{one-bit 0 or 1}\\
+	\For {$i$ $\leftarrow$ $2$ \KwTo  $2^n$ \textbf{by} $i*=2$}{
+	\For {$j$ $\leftarrow$ $i-1$ \KwTo $0$ \textbf{by} $j-=1$} {\cmt{the previous generated code is added again in reverse order} \\
+	push $arr[j]$ into $arr$ \\
+	}
+	\For {$j$ $\leftarrow$ $0$ \KwTo $i$ \textbf{by} $j+=1$} {
+	add $"0"$  ahead $arr[j]$ \cmt{0 to first half}\\
+	}
+	\For {$j$ $\leftarrow$ $i$ \KwTo $i*2$ \textbf{by} $j+=1$} {
+	add $"1"$  ahead $arr[j]$ \cmt{1 to second half}\\
+	}
+	}
+	\Ret $arr$
+	}
+$code \leftarrow$ \myFunc{$len(set)$}
+
+\For {$j$ $\leftarrow$ $0$ \KwTo $2^n - 1$ }	{
+$subset \leftarrow [\ ]$ \cmt{same procedure as in binaryCounting}\\
 	\For {$bit$ $\leftarrow$ $0$ \KwTo $n$} 
 	{
-	\If{ $count \& (1 << bit)$\cmt{every time left shift 1 by $bit$}} {
-	push $set[j]$ into $subset$ \cmt{find the bit set as 1 in $count$} \\  
+	\If{ $code[j] \& (1 << bit)$} {
+	push $set[bit]$ into $subset$ \\  
 	}
 	}
 	push $subset$ into $result$ \\
 }	
-
 \Ret $result$
+
 \end{Algorithm}
+Time complexity for this algorithm is $\mathcal{O}(n\cdot 2^n)$. 
 
-
+For generating the code, the out loop will execute for $(n-1)$ times. For three inner loop, as they both use $i$ and $2 + 2^2 + ...+ 2^{n-1} = \mathcal{O}(2^n)$. So total time complexity for generating code is$\mathcal{O}(n\cdot 2^n) $. Generating the subsets based on the code is $\mathcal{O}(m\cdot 2^n)$. So we could get total time complexity $\mathcal{O}(n\cdot 2^n)$.
 
 % include references where to find information on the given problem using latex bibliography
 % insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
