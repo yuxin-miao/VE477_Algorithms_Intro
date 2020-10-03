@@ -1,0 +1,140 @@
+\documentclass[catalog.tex]{subfiles}
+
+% do not write anything in the preamble
+
+\begin{document}
+
+\def\pbname{Generating Subsets} %change this, do not use any number, just the name
+
+\section{\pbname} 
+
+% only for overview, so short description (no more than 1-2 lines)
+\begin{overview}
+\item [Algorithm:] Backtracking~(algo.~\ref{alg:\currfilebase_a}), binaryCounting~(algo.~\ref{alg:\currfilebase_b})
+	% -	must match the label of the algorithm 
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+\item [Input:] A set of integers with length $n$
+\item [Complexity:] $\mathcal{O}(2^n)$ with Backtracking, $\mathcal{O}(n2^n)$ with binaryCounting, 
+\item [Data structure compatibility:] data structures that can be used with the algorithm; N/A if unrelated
+\item [Common applications:] most common fields where this algorithm is used
+\end{overview}
+
+
+\begin{problem}{\pbname}
+	Given a set of distinct integers, generate all possible subsets. 
+\end{problem}
+
+
+\subsection*{Description}
+As specified in the overview, the input is a set of distinct integers. Although $set$ is defined as consisting of non-repetitive elements, distinct is emphasized to avoid misunderstanding. Input could also be a positive integer $n$, which represents the set $\{ 1, 2, ... ,n\}$. And this is could be included in the \textit{a set of distinct integers}. 
+
+A more general input would be a set of \textit{any type items}, such as set $\{ a, b, c\}$. As the algorithm would be same as for a set of integers, this project will use a set of integers for simpler explanation. 
+
+The output  is all the subsets of the given set $S$ with length $n$ (power set $P(S)$), so there are $2^n$ subsets in $P(S)$. For successful generating, the key is to establish a numerical sequence among all subsets and there are two primary alternatives \cite{1}
+\begin{enumerate}
+\item[•] \textit{Lexicographic order}: the most intuitive order for generating combinatorial objects, as human will generally use. For example, the eight subsets of $\{ 1, 2, 3\}$ in lexicographic order would be $\{ \}, \{1\}, \{1,2\}, \{1,2,3\}, \\ \{1,3\}, \{2\}, \{2,3\}, \{3\}$. As each time we find a previous number "back", the \textbf{backtracking} algorithm will find the subset in this order. 
+
+\item[•] \textit{Binary counting}: Based on the binary number representation of the number of the subset. For example,for set $\{ 1, 2, 3\}$, the binary number representation from $0$ to $2^n-1 = 7$ would be $000, 001, 010, 011, 100, 101, 110,\\ 111$, which corresponds to $\{ \}, \{3\}, \{2\}, \{2,3\},  \{1\}, \{1,3\}, \{1,2\}, \{1,2,3\}$. As the subset could be decoded through the number from $0$ to $2^n-1 = 7$, the \textbf{binaryCoutning} algorithm would find subsets in this order. 
+
+\item[•] \textit{Gray code}: A subset sequence as the adjacent subsets differ by insertion or deletion of exactly one item. The gray code for 3-bits is  $000, 001, 011, 010, 110, 111, 101, 100$. Compared with $binary counting$, such sequence could not be obtained directly. With this sequence, generate the subsets based on this sequence will have same procedure as based on $binaryCounting$. But the total time complexity will be larger. The \textbf{grayCode} algorithm discuss how to generate such sequence.  
+\end{enumerate}
+
+
+
+
+Detailed description of the problem; More detailed information on the input and complexity; more applications with details on how they relate to each other (if this is the case). Do not hardcode references,  instead use the {\tt \textbackslash label} and {\tt \textbackslash reference} commands.  Examples: citation~\cite{ve477}, a group of figures (Fig.~\ref{fig:\currfilebase_group}), a sub-figure (Fig.~\ref{fig:\currfilebase_a}). To display a new line skip a line in the source code, do not use {\tt \textbackslash\textbackslash}.
+
+
+\begin{figure}[!htb]
+	\centering
+	\subfloat[Pic. 1\label{fig:\currfilebase_a}]{\includegraphics{\currfilebase_a}}
+	\hspace{2cm} %\qquad
+	\subfloat[Pic. 2\label{fig:\currfilebase_b}]{\includegraphics{\currfilebase_b}}
+	\caption{Group of pictures}
+	\label{fig:\currfilebase_group}
+\end{figure}
+% add comment in the pseudocode: \cmt{comment}
+% define a function name: \SetKwFunction{shortname}{Name of the function}
+% use the defined function: \shortname{$variables$}
+% use the keyword ``function'': \Fn{function name}, e.g. \Fn{\shortname{$var$}}
+
+\subsubsection{Backtracking}
+
+\begin{Algorithm}[\textbf{Backtracking}($set$)\label{alg:\currfilebase_a}]
+\SetKwFunction{myFunc}{subsetRec}
+	\Input{A set of distinct integers $set$}
+	\Output{$result$, store all the subsets of $set$}
+	\BlankLine
+	\BlankLine
+\Fn{\myFunc{$set$,$subset$, $result$, $index$}}{
+	push $subset$ into $result$ \\
+	\For {$i$ $\leftarrow$ $index$ \KwTo  $len(set)$}{
+	push $set[i]$ into $subset$ \\
+	\myFunc{$set$,$subset$, $result$, $index+1$} \\
+	pop out the last element of $subset$ \cmt{exclude $set[i]$ and backtracking}\\
+	}
+	\Ret 
+}
+\myFunc{$set$, $[\ ]$, $[[\ ]]$, $0$} \\
+\Ret $result$
+\end{Algorithm}
+
+
+
+\subsubsection{Binary Counting}
+The number of all subsets of a set with size $n$ is $2^n$. Binary counter approach could be used, as any unique binary string of length $n$ represent a unique subset. So we could start from $0$ and end with $2^n - 1$, and for every bit that set as 1, push the number represent by this bit into subset. 
+\begin{Algorithm}[\textbf{binaryCounting}($set$)\label{alg:\currfilebase_b}]
+	\Input{A set of distinct integers $set$}
+	\Output{$result$, store all the subsets of $set$}
+	\BlankLine
+	\BlankLine
+$n \leftarrow$ $len(set)$ \\	
+\For {$count$ $\leftarrow$ $0$ \KwTo $2^n - 1$}	{
+$subset \leftarrow [\ ]$ \\
+	\For {$bit$ $\leftarrow$ $0$ \KwTo $n$} 
+	{
+	\If{ $count \& (1 << bit)$\cmt{every time left shift 1 by $bit$}} {
+	push $set[j]$ into $subset$ \cmt{find the bit set as 1 in $count$} \\  
+	}
+	}
+	push $subset$ into $result$ \\
+}	
+
+\Ret $result$
+\end{Algorithm}
+
+\subsubsection{Gray Code}
+
+\begin{Algorithm}[\textbf{grayCode}($set$)\label{alg:\currfilebase_c}]
+	\Input{A set of distinct integers $set$}
+	\Output{$result$, store all the subsets of $set$}
+	\BlankLine
+	\BlankLine
+$n \leftarrow$ $len(set)$ \\	
+\For {$count$ $\leftarrow$ $0$ \KwTo $2^n - 1$}	{
+$subset \leftarrow [\ ]$ \\
+	\For {$bit$ $\leftarrow$ $0$ \KwTo $n$} 
+	{
+	\If{ $count \& (1 << bit)$\cmt{every time left shift 1 by $bit$}} {
+	push $set[j]$ into $subset$ \cmt{find the bit set as 1 in $count$} \\  
+	}
+	}
+	push $subset$ into $result$ \\
+}	
+
+\Ret $result$
+\end{Algorithm}
+
+
+
+% include references where to find information on the given problem using latex bibliography
+% insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
+% prefer books, research articles, or internet sources that are likely to remain available over time
+% as much as possible offer several options, including at least one which provide a detailed study of the problem
+% if available include links to programs/code solving the problem
+% wikipedia is NOT acceptable as a unique reference
+\singlespacing
+\newpage
+\printbibliography[title={References.},resetnumbers=true,heading=subbibliography]
+
+\end{document}
