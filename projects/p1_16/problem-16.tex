@@ -117,14 +117,14 @@ Recursion and iteration both could be used to generate gray code with given leng
 \Fn{\myFunc{$n$}}{
 $arr \leftarrow [[\ ]]$ \\ 
 	push $"0", "1"$ into $arr[0], arr[1]$ \cmt{one-bit 0 or 1}\\
-	\For {$i$ $\leftarrow$ $2$ \KwTo  $2^n$ \textbf{by} $i*=2$}{
-	\For {$j$ $\leftarrow$ $i-1$ \KwTo $0$ \textbf{by} $j-=1$} {\cmt{the previous generated code is added again in reverse order} \\
+	\For {$i$ $\leftarrow$ $2$ \KwTo  $2^n$ \textbf{by} $\times 2$}{
+	\For {$j$ $\leftarrow$ $i-1$ \KwTo $0$ \textbf{by} $-1$} {\cmt{the previous generated code is added again in reverse order} \\
 	push $arr[j]$ into $arr$ \\
 	}
-	\For {$j$ $\leftarrow$ $0$ \KwTo $i$ \textbf{by} $j+=1$} {
+	\For {$j$ $\leftarrow$ $0$ \KwTo $i$ \textbf{by} $+1$} {
 	add $"0"$  ahead $arr[j]$ \cmt{0 to first half}\\
 	}
-	\For {$j$ $\leftarrow$ $i$ \KwTo $i*2$ \textbf{by} $j+=1$} {
+	\For {$j$ $\leftarrow$ $i$ \KwTo $i*2$ \textbf{by} $+1$} {
 	add $"1"$  ahead $arr[j]$ \cmt{1 to second half}\\
 	}
 	}

@@ -1,0 +1,167 @@
+\documentclass[catalog.tex]{subfiles}
+
+% do not write anything in the preamble
+
+\begin{document}
+
+\def\pbname{Generating Partitions} %change this, do not use any number, just the name
+
+\section{\pbname} 
+
+% only for overview, so short description (no more than 1-2 lines)
+\begin{overview}
+\item [Algorithm:] descendingDecomp~(algo.~\ref{alg:\currfilebase_a}), ascendingDecomp~(algo.~\ref{alg:\currfilebase_b})
+	% -	must match the label of the algorithm 
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+\item [Input:] a positive integer $n$
+\item [Complexity:]  $\mathcal{O}(2^n)$ for both
+\item [Data structure compatibility:] N/A
+\item [Common applications:] nuclear fission 
+\end{overview}
+
+
+\begin{problem}{\pbname}
+	Given a positive integer $n$, generate all partitions where the sum of numbers in this partition is $n$.
+\end{problem}
+
+
+\subsection*{Description}
+Integer partition of $n$ are sets of non-zero integers that add up to exact $n$. A popular solution is to generate the partition in lexicographically decreasing order. For example, the integer partition of $6$ in decreasing order is $[6],[5,1],[4,2],[4,1,1],[3,3],[3,2,1],[3,1,1,1],[2,2,2],[2,2,1,1],[2,1,1,1,1],[1,1,1,1,1,1]$. However, another solution is to generate in ascending order (the reverse generating order of the above example), which has high efficiency with $Python$ unique feature. And the time complexity for both is $\mathcal{O}(2^n)$ because of the execution time mainly determined by the partition function, which would be discussed later.
+
+\subsubsection{Descending Order}
+The partition is generated in lexicographically descending order such that generating all partitions $a_1 \geq a_2 \geq ... \geq a_m \geq 1$ where $a_1 + a_2 +...+a_m = n$ and $1 \leq m \leq n$. The key is to find next partition based on the current partition, so as to decompose. The first partition is $\{n \}$ itself, and then following the rule that subtract the smallest but larger than one value by 1 and collect all the 1's so to match the new smallest part larger than 1 \cite{1}. Assume the current partition is array $PC$ and the smallest but larger than 1 value is at index $k$, and denote the sum of all the 1's as $sumOne$.The next partition to generate based on the current partition $PC$ has two cases 
+\begin{enumerate}
+\item[•] If $(PC[k] - 1)\geq (sumOne+1)$, $P[k]-=1$ and put $sumOne + 1$ at $PC[k+1]$, and then the sorted order is realized (e.g. $PC=[5,1]$, $k=0, P[k]-=1,  P[k+1] = sumOne + 1=1 + 1$, next partition is $[4,2]$ ).
+\item[•] If $PC[k] < sumOne$, let $PC[k+1] = PC[k], sumOne-=PC[k]$ and increment k until $(PC[k] - 1)\geq (sumOne+1)$. The step is similar to divide $sumOne+1$ by $P[k]-1$ and put the division result at next $P[k]-1$ positions (e.g. $PC = [3,1,1,1], k = 0, sumOne+1 = 4 / (PC[k]-1) = 4/2 = 2$, the next partition is $[2,2,2]$). 
+\end{enumerate} 
+% add comment in the pseudocode: \cmt{comment}
+% define a function name: \SetKwFunction{shortname}{Name of the function}
+% use the defined function: \shortname{$variables$}
+% use the keyword ``function'': \Fn{function name}, e.g. \Fn{\shortname{$var$}}
+\begin{Algorithm}[DescendingDecomp\label{alg:\currfilebase_a}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{An integer $n$}
+	\Output{All integer partitions of $n$, stored in $result$}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	$PC \leftarrow$ a size-n array with 0 \\
+	$k \leftarrow 0$ \\
+	$PC[k] \leftarrow  n$ \\
+	\While {True} {
+	push $PC[0:k+1]$ into $result$ \\
+	break the loop if $k < 0$ \\
+	$sumOne \leftarrow$ number of $1$ in $PC[0:k+1]$ \\
+	$PC[k]\leftarrow PC[k] -1$ \\
+	$sumOne \leftarrow  sumOne +1$ \\
+	\While {$sumOne > P[k]$} {
+		$PC[k+1] \leftarrow P[k]$ \\
+		$sumOne \leftarrow sumOne- P[k]$ \\
+		$k\leftarrow k+1$ \\
+		}
+	
+		$PC[k+1] \leftarrow  sumOne$ \\
+		$k\leftarrow k+1$ \\
+		}
+	\Ret $result$
+
+\end{Algorithm}
+
+The partition function $p(n)$ represents the number of possible partitions of a non-negative integer $n$. However, no exact formula for this function is known. It grows as an exponential function as the square root of $n$ \cite{2}. So the time complexity of this algorithm is $\mathcal{O}(2^n)$.
+
+
+\newpage
+
+\subsubsection{Ascending Order}
+This algorithm will begin with an array of 1 with size n, then add last two elements in the array. When the two numbers add up to 2, there is no other option (as they could only be decomposed into two $1$). However, for other added up number, other decompose option need to consider. A recursive algorithm is discussed here. With the smallest part at least $m$, prepending $m$ to all ascending compositions of $n-m$. As m could not be less than 1 or greater than $\lfloor n/2 \rfloor$, m range from 1 to  $\lfloor n/2 \rfloor$. The process is completed by visiting the single composition of $n$.
+\begin{Algorithm}[AscendingDecomp\label{alg:\currfilebase_b}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{An integer $n$}
+	\Output{All integer partitions of $n$, stored in $result$}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	$a_1 \leftarrow 0$ \\
+	$k \leftarrow 2$ \\
+	$a_2 \leftarrow n$ \\
+	\While {$k \neq 1$} {
+	$y \leftarrow a_k - 1$ \\
+	$k \leftarrow k - 1$ \\
+	$x \leftarrow a_k + 1$ \\
+	\While {$x\leq y$} {
+		$a_k \leftarrow x$ \\
+		$y \leftarrow y-x$ \\
+		$k\leftarrow k+1$ \\
+		}
+	
+		$a_k \leftarrow x + y$ \\
+		store $a_1, ..., a_k$ into $result$ \\
+		}
+	\Ret $result$
+
+\end{Algorithm}
+
+This algorithm is constant Amortised time, so the average computation per partition is constant. The algorithm could be further modified to have a better efficiency\cite{3}. This extra efficiency is gained through the structure of the neighbor partitions generating in the ascending process. For example, consider the following partition of $n = 10$.
+$$
+1 + 1 +2+6 ,
+1+1+3+5,
+1+1+4+4
+$$
+This transition could be made very efficiently as we only need to add one and subtract one to the second last and last part respectively. Based on this, the algorithm is modified as 
+\begin{Algorithm}[AscendingDecomp2]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{An integer $n$}
+	\Output{All integer partitions of $n$, stored in $result$}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	$a_1 \leftarrow 0$ \\
+	$k \leftarrow 2$ \\
+	$y \leftarrow n-1$ \\
+	\While {$k \neq 1$} {
+	$k \leftarrow k - 1$ \\
+	$x \leftarrow a_k + 1$ \\
+	\While {$2x\leq y$} {
+		$a_k \leftarrow x$ \\
+		$y \leftarrow y-x$ \\
+		$k\leftarrow k+1$ \\
+		}
+	$l \leftarrow k + 1$ \\
+	\While {$x \leq y$} {
+		$a_k \leftarrow x$ \\
+		$a_l \leftarrow y$ \\
+		store $a_1, ...,a_l$ into $result$ \\
+		$x \leftarrow x+1$ \\
+		$y \leftarrow y-1$ \\
+	}
+		$y \leftarrow y+x-1$ \\
+		$a_k \leftarrow y+1$ \\
+		store $a_1, ..., a_k$ into $result$ \\
+		}
+	\Ret $result$
+
+\end{Algorithm}
+All three algorithm is implemented in Python and the Ascending Decomposition is implemented using generator.The simulation result shows that using Python generator would improve the program efficiency greatly, which meets the assumption.
+\begin{figure}[!htb]
+	\centering
+\includegraphics[scale=0.4]{\currfilebase_a}
+	\caption{Time of different algorithm}
+\end{figure}
+
+
+% include references where to find information on the given problem using latex bibliography
+% insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
+% prefer books, research articles, or internet sources that are likely to remain available over time
+% as much as possible offer several options, including at least one which provide a detailed study of the problem
+% if available include links to programs/code solving the problem
+% wikipedia is NOT acceptable as a unique reference
+\singlespacing
+\printbibliography[title={References.},resetnumbers=true,heading=subbibliography]
+
+\end{document}
