@@ -1,6 +1,45 @@
 [TOC]
 
+## Computational Problem
+
+- a computational problem is a question or a set of questions that a computer might be able to solve. (what is a computer?)
+- study of the solutions to the computational problem composes the field of *Algorithms*
+- *computational complexity* attempts to classify the algorithm depending on their speed or memory usage. 
+
+1. decision problem
+2. search problem
+3. counting problem
+4. optimization problem
+5. function problem
+
+### Turing Machine 
+
+
+
+- a function $f: \sum^* \rightarrow \sum^*$ is said to be **Turing computable** if there exists a Turing machine $M$ which returns $f(x)$ for any input $x$. 
+
+1.  *deterministic polynomial algorithm:*  $T_M(x)\leq P(x)$ 
+2. $L$ a language, $P$ decision problem $P$
+
+- The set of the decision problems which could be solved by a deterministic polynomial algorithm defines the *class P*.
+
+* *class NP:* a decision problem is computable by a non-deterministic polynomial algorithm. 
+  * be polynomial with the certificate 
+* *class co-NP* 
+* *NP-Complete:* NP-Complete is a complexity class which represents the set of all problems `X` in NP for which it is possible to reduce any other NP problem `Y` to `X` in polynomial time.
+* *NP-hard:* do not have to be in NP, do not have to be decision problem. *a problem `X` is NP-hard, if there is an NP-complete problem `Y`, such that `Y` is reducible to `X` in polynomial time*.
+
+
+
+P问题是在多项式时间内可以被解决的问题，而NP问题是在多项式时间内可以被验证其正确性的问题。 NP困难问题是计算复杂性理论中最重要的复杂性类之一。如果所有NP问题都可以多项式时间归约到某个问题，则称该问题为NP困难。
+
+$NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/截屏2020-10-10 上午10.09.31.png" alt="截屏2020-10-10 上午10.09.31" style="zoom:50%;" />
+
 ## Time complexity
+
+- stirling’s formula $n! \approx \sqrt{2\pi n}(\frac{n}{e} )^n$
+- $logn! \in \Theta(n \cdot logn), \lceil logn\rceil \in \Theta(logn)$
+- 
 
 ![image-20200915132328058](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200915132328058.png)
 
@@ -360,7 +399,15 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 - *iterated logarithm* function <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927103159560.png" alt="image-20200927103159560" style="zoom:33%;" />
 
-  such that, the iterated algorithm of n is the number of time that the function need to applied to obtain a number smaller than  2
+  such that, the iterated algorithm of n is the number of time that the function log need to be applied to obtain a number smaller than  2
+
+- The cost for one `find` operation is $\mathcal{O}(logn)$
+
+  because for each `find`, the path will be compressed, 
+
+- The omortized time for a sequence of $m$ `GenSet` `Union` `Find` operations, $n$ of which are `GenSet` can be performed in time $\mathcal{O}(m\alpha(n))$. 
+
+The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
 ## Ackerman’s function
 
@@ -485,13 +532,17 @@ end
 
 **time complexity**: For merge O(n)
 
-sort part: every time spilt it into two equal parts, a=2, b=2, f(n) = O(n), 
+sort part: every time spilt it into two equal parts, a=2, b=2, f(n) = O(n), $T(n) = \Theta(n^{log_ba}logn) = \mathcal{O}(nlogn)$
+
+So total for **Sort and Count** is $\mathcal{O}(n \rm{log} n)$
 
 ### Stable Marriage Problem
 
 Algorithm: Gale-Shapley
 
+> Implements 477 Lab3.1.2
 
+Time complexity $\mathcal{O}(n^2)$
 
 
 
@@ -590,6 +641,27 @@ Time complexity of hash table vs. sorted array
 - insert(): O(1) vs. O(n)
 - find(): O(1) vs. O(n)
 - Not use hash table : rank search / sort
+
+### Bloom Filter
+
+用于添加/查询元素，不可以删除元素。高空间利用率
+
+an array of n bits and k hash functions
+
+- to `insert`, for every element, calculate the related hash values (k in total), then change the corresponding index value as 1. 
+- to `find`, calculate the related hash values and look up, if any one is 0, the element must not be in it. But even though all the related slots are 1, do not mean the element must be exist (small false positive probability: may find a not-existed element / no false negative probability: existed number must be found) 
+
+False positive probability
+
+​	universal hashing function (random uniform), for each hash function, of slot j. not 1->(1-1/n)
+
+​	so all $Pr[A[j] =0] = (1-1/n)^{k|S|}$. Then could get the probability of a slot as 1. Then all k slots are 1 -> false positive probability 
+
+
+
+longer array (more space) -> decrease the false positive probability (likelihood decrease exponentially)
+
+could set a Bloom Filter before the hash table, only when returns True (false positive) then use the hash table. 
 
 ## Binary Search Tree
 
