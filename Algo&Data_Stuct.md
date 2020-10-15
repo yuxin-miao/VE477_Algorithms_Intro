@@ -663,9 +663,16 @@ longer array (more space) -> decrease the false positive probability (likelihood
 
 could set a Bloom Filter before the hash table, only when returns True (false positive) then use the hash table. 
 
-## Binary Search Tree
+## Trees
 
-### 定义
+- an extension of linked list strucutre, each node connectes to multiple nodes 
+- hierarchical structure 
+
+### Binary Search Tree
+
+each node can only have at most two children 
+
+1. 定义
 
 * 空树是一棵BST
 * 对于任意节点，它的key比左树的**所有**子节点大，比右树的**所有**子节点小
@@ -673,46 +680,46 @@ could set a Bloom Filter before the hash table, only when returns True (false po
 
 For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalanced       
 
-### 操作
+2.  操作
 
-#### Search
+    **Search**
 
 * node *search(node *root, Key k)
 
 * 递归搜索：若与当前node相同则返回，小于则搜索left，大于则搜索right
 
-#### Insertion
+  **Insertion**
 
 * void insert(node *&root, Item item)：使用reference-to-pointer，因为是直接针对节点的修改，而不是修改值（修改pointer本身而非修改pointer指向）
 * 假装搜索，插到最后搜索为NULL的地方
 * 若key重复会直接无视（判断key的时候不要写else，写else if）
 
-#### Remove
+  **Remove**
 
 * void remove(node *&root, Key k)
 * 若为leaf：直接删除（先delete后置为NULL）
 * 若为单节点：删掉后把下面的接上
 * 若为双节点：把该节点赋值为左树最大值（此时不要直接改pointer），把左树最大值节点接为其左子树（可能为leaf也可能为单节点），最后delete最大值节点
 
-### 额外操作
+3.  额外操作
 
-#### Output in Sorted Order 排序输出
+    **Output in Sorted Order 排序输出**
 
 * 直接中序遍历输出 (In-order DFS): $O(n)$
 
-#### Get Min/Max
+   **Get Min/Max**
 
 * 一直往左/右遍历直到尽头
 * $O(height)$ 平均: $O(\log n)$
 
-#### Get Predecssor
+   **Get Predecssor**
 
 * 用helper function递归，或者迭代实现
 * $O(height)$ 平均: $O(\log n)$
 * search目标key，途中记录first left ancestor(如果往右search了就记录root)
 * 搜索到key后，如果左树非空，则返回左树Max，否则返回first left ancestor
 
-#### Rank Search
+   **Rank Search**
 
 * 最小项rank为0
 * node增加额外的变量`int leftSize`，记录左树节点个数
@@ -721,7 +728,7 @@ For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalance
 * else return rankSearch(root->right, rank – 1 - root->leftSize);
 * $O(height)$ 平均: $O(\log n)$
 
-#### Range Search
+  **Range Search**
 
 * void **rangeSearch**(node **root**, Key **searchRange**[], Key **treeRange**[], List **results**)
 * $O(n) $

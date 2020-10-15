@@ -178,7 +178,7 @@ $a0 \leftarrow min(a7.weight, a8.weight)$\\
 \item[b.] Second layer: put the top layer face down now. Two algorithms to make the front-up edge to the right-front or left-front positions, called right algorithm (URU'R'U'F'UF) and left algorithm (U'L'ULUFU'F').  
 \item[c.] Last layer: make a yellow cross first (FRUR'U'F') then for yellow edges (RUR'URU2R'U to switch the front and left yellow edges). Premutation for the last layer (URU'L'UR'U'L) then do the orientation.  
 \end{enumerate}
-\item CFOP method. The advanced Fridrich (CFOP) method still divides the problem into different layers, and apply different algorithm for each step shown in Figure \ref{fig:cfop}.
+\item CFOP method \cite{cube2}. The advanced Fridrich (CFOP) method still divides the problem into different layers, and apply different algorithm for each step shown in Figure \ref{fig:cfop}.
 
 \begin{figure}[!ht]
 \centering
@@ -196,8 +196,18 @@ $a0 \leftarrow min(a7.weight, a8.weight)$\\
 
 \end{enumerate}    
 
-\bibliographystyle{unsrt}
-\bibliography{sample}
+\begin{thebibliography}{9}
+\bibitem{cube} 
+"How to solve the Rubik's Cube?"
+\textit{Ruwix Twisty Puzzle Wiki}. 
+\\\texttt{https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/}
+
+\bibitem{cube2} 
+"Rubik's Cube solution with advanced Fridrich (CFOP) method"
+\textit{Ruwix Twisty Puzzle Wiki}. 
+\\\texttt{https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/}
+\end{thebibliography}
+
     
     \end{homeworkProblem}
         \begin{homeworkProblem}
@@ -215,7 +225,7 @@ $a0 \leftarrow min(a7.weight, a8.weight)$\\
     %Q3
     \begin{homeworkProblem}
     
-    It is not sufficient to prove that PRIMES is in $\mathcal{P}$. It is obvious that by dividing $n$ using incremented integers, the process could be stopped when the integer is larger than $\sqrt{n}$.
+    It is \textbf{not sufficient} to prove that PRIMES is in $\mathcal{P}$. It is obvious that by dividing $n$ using incremented integers, the process could be stopped when the integer is larger than $\sqrt{n}$ and the algorithm trivial division could be written in pseudo-code as 
     
          \begin{algorithm}[H]
 \Input{integer $n$}
@@ -227,11 +237,18 @@ $i \leftarrow i + 1$ \\
  }
 \KwRet{False}
 \caption{trivial division for PRIMES} \end{algorithm}
- The loop will be executed for at most $\sqrt{n}$ times,
+ The loop will be executed for at most $\sqrt{n}$ steps, however, it does not mean PRIMES is in $\mathcal{P}$.
+ 
+ 
     \textbf{Prime Number Theorem:} $\pi (N) \sim  \frac{N}{log(N)}$, where $\pi (N)$ is the function counting the prime number smaller or less than $N$ and $log(N)$ is the natural logarithm of $N$. 
     \end{homeworkProblem}
     
+Then, consider a base two number $a$ with $n-digits$. In the worst case, it will start from two and works up to the square root of $a$. The algorithm requires 
 
+ $$\pi (2^{n/2}) \sim  \frac{2^{n/2}}{\frac{n}{2}ln(2)}$$
+ trivial divisions. 
+ 
+ So an algorithm with up to $\sqrt{N}$ steps respect to input $N$ is not sufficient. An algorithm with $\lceil logN \rceil$ number of steps could prove PRIMES is in $\mathcal{P}$.
 
 
 
