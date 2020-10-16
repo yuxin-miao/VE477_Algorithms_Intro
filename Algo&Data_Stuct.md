@@ -800,11 +800,50 @@ For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalance
 
 
 
+## Fibinacci heap
+
+> implementation: VE477 lab4
+
+<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201015153844874.png" alt="image-20201015153844874" style="zoom:50%;" />
 
 
 
+1. definition 
+
+   A **Fibonacci heap** is a collection of rooted trees that are **min-heap ordered**. That is, each tree obeys the **min-heap property**: the key of a node is greater than or equal to the key of its parent.
+
+   - each node $x$ has a pointer to its parent $x.p$ and a pointer to its child $x.child$. All the children of $x$ is circular doubly linked, (**child list**). *环形双向链表：便于增删元素和union .* $x.degree$ store the number of children of $x$. $x.mark$ (boolean) indicate whether $x$ has lost child after becoming the child of $x.p$. 
+   - Pointer $H.min$: pointing to the tree with the root that has smallest key (**minimum node**).
+   - All the root of trees (**root list**).
+   - $H.n$: the number of node in $H$. 
+
+   <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201015155102698.png" alt="image-20201015155102698" style="zoom:50%;" />
+
+2. **Mergeable-heap operations**
+
+   不论根链表在执行`EXTRACT-MIN` 如何，执行完后，根链表中每个结点要有与根链表中其他结点均不同的度数，根链表规模最大为$D(n) + 1$.
+
+   - `UNION`: 将$H_1,H_2$ 的root list链接，使$H.min = min(H_1.min, H_2.min)$. 
+
+   - `EXTRACT-MIN`: 
+
+     - add each child of $z = H.min$ into root list, detele $z$ from root list // if $z ==z.right$, only one element in $H$, $H.min==NIL$ (no element in $H$ anymore) // else 
+
+     - $H.min = z.right$, consolidata $H$. 
+
+       a) find two root $x, y$ in the root list with same degeree. $x.key \leq y.key$. 
+
+       b) link $y$ to $x$. remove $y$ from root list. $x.degre++$. 
+
+     - $H.n =H.n -1$, return $z$. 
+
+   - `DELETE`: 将要delete的节点的key设为$-\infty$ `DECREASE-KEY` then `EXTRACT-MIN`
+
+     
 
 
 
+**Amortized Analysis**
 
+在一个$n$个结点的斐波那契堆中任何结点的最大degree都有上界$D(n)=O(lgn)$. s.t. $D(H.n)=O(lgn)$ 
 
