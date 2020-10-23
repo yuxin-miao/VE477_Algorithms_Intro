@@ -99,6 +99,30 @@ A sufficient condition of Big-Oh
     2. in quick sort, if choose the median as the pivot, a=2,b=2,d=1
     3. in binary search, a=1, b=2, d=0
 
+
+
+## NP
+
+Convert a cnf-formula $F$ to a 3cnf-formula $F'$
+
+Denote each clause in $F$ as $C_1, C_2, ...,C_k$
+a. For clause has one literal as $x_1$, change to $(x_1\lor x_1 \lor x_1)$
+b. For clause has two literals as $(x_1\lor x_2)$, change to $(x_1\lor x_2 \lor x_1)$
+c. For clause has more than three literals as $(x_1\lor x_2\lor ... \lor x_m)$, introduce new variable $z_i$ change to $(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land ... \land (\neg z_{m-3}\lor x_{m-1} \lor x_m)$
+
+
+
+
+
+![image-20201023132044585](/Users/yuxinmiao/CLionProjects/VE477/477image/image-20201023132044585.png)
+
+Then we could rewrite it as 
+$$\begin{align*}
+&(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor\neg x_6)\land \\
+&(\neg x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor\neg x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor x_6)\land \\
+&( x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor \neg x_6)\land \\
+&(x_1 \lor \neg x_2 \lor x_1)\end{align*}$$
+
 ## Divide-and-conquer Approach
 
 - merge sort 
@@ -544,7 +568,15 @@ Algorithm: Gale-Shapley
 
 Time complexity $\mathcal{O}(n^2)$
 
+### N Queens Puzzle 
 
+> Implementation: Leetcode #52
+
+8*8棋盘上，皇后可以横直斜走，格数不限。皇后之间不可以相互攻击->任何两个皇后不可以在同一行，同一列以及同一斜线上。
+
+backtracking: 
+
+![image-20201017141331951](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201017141331951.png) 
 
 ## Hashing
 

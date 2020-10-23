@@ -55,7 +55,7 @@ class FibHeap:
     def link(self, y, x):
         # remove y from root list
         self.__remove_from_list(y)
-        printNode(x)
+        # printNode(x)
         # make y a child of x
         y.left = y.right = y
         y.parent = x
@@ -190,7 +190,7 @@ class FibHeap:
         # delete x from heap
         # make x as H.min through decreasing x's key
         self.decrease_key(x, float("-inf"))
-        printRootList(self)
+        # printRootList(self)
         self.extract_min()
 
 
