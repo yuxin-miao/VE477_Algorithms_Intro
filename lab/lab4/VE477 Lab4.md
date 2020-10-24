@@ -1,7 +1,54 @@
+<p align="right"> 于欣淼 518021910792 </p>
+
+# VE477 Lab4
+
+### Q1 
+
+The implementation of Fibonacci heap is attached at the end 
+
+### Q2
+
+denote the number of items in the heap as $n$.
+
+| Procedure     | Fibonacci Heap  (amortized) |
+| ------------- | --------------------------- |
+| `MakeHeap`    | $\Theta(1)$                 |
+| `Insert`      | $\Theta(1)$                 |
+| `Minimum`     | $\Theta(1)$                 |
+| `ExtractMin`  | $\Theta(\rm{log}n)$         |
+| `Union`       | $\Theta(1)$                 |
+| `DecreaseKey` | $\Theta(1)$                 |
+| `Delete`      | $\Theta(\rm{log}n)$         |
+
+### Q3
+
+- List the running time for operations on these two implementations
+
+| Procedure     | Binary Heap (worst-case) | Fibonacci Heap  (amortized) |
+| ------------- | ------------------------ | --------------------------- |
+| `MakeHeap`    | $\Theta(1)$              | $\Theta(1)$                 |
+| `Insert`      | $\Theta(\rm{log}n)$      | $\Theta(1)$                 |
+| `Minimum`     | $\Theta(1)$              | $\Theta(1)$                 |
+| `ExtractMin`  | $\Theta(\rm{log}n)$      | $\Theta(\rm{log}n)$         |
+| `Union`       | $\Theta(n)$              | $\Theta(1)$                 |
+| `DecreaseKey` | $\Theta(\rm{log}n)$      | $\Theta(1)$                 |
+| `Delete`      | $\Theta(\rm{log}n)$      | $\Theta(\rm{log}n)$         |
+
+Notice that the the running time of binary heap is analyzed based on worst-case while the of fibonacci heap is amortized analysis. So Fibonacci Heap performs better for `Insert`, `Union`, `DecreaseKey`, but might be worse for `ExtractMin` and `Delete`. 
+
+- Advantages of Fibonacci Heap: supports a set of operations to be “mergeable heap” with running in constant amortized time, suitable when not much `ExtractMin` and `Delete` operations are needed. 
+- Disadvantages of Fibonacci Heap: hard to implement and constant factors.
+
+### Q4
+
+With a constant amortized running time for `Insert`, `Union` and `DecreaseKey`, the circumstances that we need to perform much of such operations will prefer Fibonacci heap. 
+
+So for **Dijkstra and Prim algorithm**, the reduced time complexity of `DecreaseKey` is really important. As time complexity is $\mathcal{O}(VlogV+ElogE)$ with binary heap and could be reduced to $\mathcal{O}(VlogV+E)$ with Fibonacci Heap. 
+
+
+
+```python
 import math
-
-
-verbose = False
 
 
 class Node:
@@ -23,33 +70,24 @@ class FibHeap:
     # need to perform MakeHeap?
 
     def __remove_from_list(self, x):
-        if verbose:
-            print("1. remove x [{}] from x's list, result: ".format(x.key), end='')
         if x.right is x:
             return None
         else:
             x.left.right = x.right
             x.right.left = x.left
-        if verbose:
-            printList(x.right)
 
     def __add_in_list(self, y, x):
         # x is an element in a circular doubly-linked list
-        # insert y into this list at x's left
-
+        # insert y into this list
         if x is None or y is None:
             return
         if y is x:
             return
-        if verbose:
-            print("2. add y [{}] into x[{}]'s list at x left, result: ".format(y.key, x.key), end='')
         # y.left = y.right = y  # to insert, make sure y is a single element
         y.right = x
         x.left.right = y
         y.left = x.left
         x.left = y
-        if verbose:
-            printList(x)
 
     def insert(self, x):
         new_node = Node(key=x)
@@ -60,19 +98,14 @@ class FibHeap:
             if new_node.key < self.h_min.key:  # update H.min if needed
                 self.h_min = new_node
         self.n = self.n + 1  # increase the root number of H
-        # print(self.h_min.key)
 
     def minimum(self):
         return self.h_min
 
     def link(self, y, x):
         # remove y from root list
-        if verbose:
-            print("3. link y [{}] -> x [{}]".format(y.key, x.key))
-            print("before link y->x: ", end='')
-            printList(y)
         self.__remove_from_list(y)
-
+        printNode(x)
         # make y a child of x
         y.left = y.right = y
         y.parent = x
@@ -84,9 +117,6 @@ class FibHeap:
         # increment x.degree
         x.degree = x.degree + 1
         y.mark = False  # y newly become a child
-        if verbose:
-            print("after link y->x: ", end='')
-            printList(x)
 
     def consolidate(self):
         # utility function for extract_min to consolidate teh root list of H
@@ -96,34 +126,24 @@ class FibHeap:
         root_degree[self.h_min.degree] = self.h_min  # put H.min according to its degree
         w = self.h_min.right  # begin to scan from right of H.min
         min_to_stop = self.h_min
-        root_list = [min_to_stop]
         while w is not min_to_stop:
-            root_list.append(w)
-            w = w.right
-
-        for w in root_list:
             d = w.degree
             x = w
-
             while root_degree[d]:
-                if root_degree[d] is w:
-                    break
                 y = root_degree[d]  # y is another node that has same degree as x
                 if x.key > y.key:
                     temp = x
                     x = y
                     y = temp
-                # if y.right is min_to_stop:  # otherwise the loop will not end
-                #     min_to_stop = x
+                if y.right is min_to_stop:  # otherwise the loop will not end
+                    min_to_stop = x
                 self.link(y, x)
-                # if y is min_to_stop:  # the original stop point links to x
-                #     min_to_stop = x
-                # if x.right is x:
-                #     min_to_stop = x
+                if x.right is x:
+                    min_to_stop = x
                 root_degree[d] = None
                 d = d + 1
             root_degree[d] = x  # x newly have one more child (x)
-
+            w = x.right
         self.h_min = None
         # rebuild the root list of H
         for item in root_degree:
@@ -144,7 +164,7 @@ class FibHeap:
             x = z.child
             if x:
                 while True:
-                    # add x into z's list (H's root list) (at z's left)
+                    # add x into z's list (H's root list)
                     temp = x.right
                     self.__add_in_list(x, z)
                     x.parent = None
@@ -154,8 +174,7 @@ class FibHeap:
             # remove z from z's list
             check = (z == z.right)
             self.__remove_from_list(z)
-            if verbose:
-                printList(z.right)
+            printList(z.right)
             if check:  # only one element
                 self.h_min = None
             else:
@@ -221,107 +240,7 @@ class FibHeap:
         # delete x from heap
         # make x as H.min through decreasing x's key
         self.decrease_key(x, float("-inf"))
-        # printRootList(self)
+        printRootList(self)
         self.extract_min()
+```
 
-    def shell(self):
-        ptr = self.h_min
-        if ptr is None:
-            return 0
-
-        while True:
-            cmdLine = input("fib> ")
-            cmdLine = cmdLine.split(' ')
-            cmd = cmdLine[0]
-
-            if cmd == 'exit':
-                return 0
-            elif cmd == 'cur' or cmd == 'current':
-                print("Current Key: {}".format(ptr.key))
-            elif cmd == 'min':
-                ptr = self.h_min
-                print("Back to min: {}".format(ptr.key))
-            elif cmd == 'ls':
-                if ptr is None:
-                    print("List: empty")
-                else:
-                    printList(ptr)
-            elif cmd == 'child':
-                printList(ptr.child)
-            elif cmd == 'i' or cmd == 'insert':
-                self.insert(int(cmdLine[1]))
-            elif cmd == 'l' or cmd == 'left':
-                print('Move left: {0} <- {1}'.format(ptr.left.key, ptr.key))
-                ptr = ptr.left
-            elif cmd == 'r' or cmd == 'right':
-                print('Move right: {0} -> {1}'.format(ptr.key, ptr.right.key))
-                ptr = ptr.right
-            elif cmd == 'gc':
-                if ptr.child is None:
-                    print('[{}]: no child to go'.format(ptr.key))
-                else:
-                    print('[{0}]: go to child {1}'.format(ptr.key, ptr.child.key))
-                    ptr = ptr.child
-            elif cmd == 'gp':
-                if ptr.parent is None:
-                    print('[{}]: no parent to go'.format(ptr.key))
-                else:
-                    print('[{0}]: go to parent {1}'.format(ptr.key, ptr.parent.key))
-                    ptr = ptr.parent
-            elif cmd == 'em':
-                node = self.extract_min()
-                print("ExtractMin: {}".format(node.key))
-                ptr = self.h_min
-
-
-
-def printRootList(h: 'FibHeap'):
-    print("root list: " + str(h.h_min.key), end=' ')
-    rh = h.h_min.right
-    while rh is not h.h_min:
-        print(rh.key, end=' ')
-        # printNode(rh)
-        rh = rh.right
-    print('\n')
-
-
-def printNode(node: 'Node'):
-    if not node:
-        return None
-    print('node: ' + str(node.key) + ', degree: ' + str(node.degree))
-    chfir = node.child
-    print('child is: ', end='')
-    for num in range(node.degree):
-        print(chfir.key, end=' ')
-        chfir = chfir.right
-    print('\n')
-
-
-def printList(node: 'Node'):
-    # print the list the node is in
-    if node is None:
-        print("Empty")
-        return
-    x = node.right
-    print(node.key, end=' ')
-    while x is not node:
-        print(x.key, end=' ')
-        x = x.right
-    print('\n')
-
-
-# fib = FibHeap()
-# fib2 = FibHeap()
-# for i in range(5, 7):
-#     fib.insert(i)
-#     fib2.insert(i + 10)
-#
-# for i in range(3):
-#     fib.insert(i)
-#     fib2.insert(i - 3)
-
-# printRootList(fib)
-# fib.extract_min()
-# printRootList(fib)
-# fib.delete(fib.h_min.child.left)
-# printRootList(fib)
