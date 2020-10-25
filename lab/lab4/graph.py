@@ -4,10 +4,13 @@ class Vertex:
         self.adjacent = {}  # use a dictionary to track all the neighbors
 
     def add_neighbor(self, neighbor, w):
-        self.adjacent[neighbor] = w
+        self.adjacent[neighbor] = int(w)
 
     def return_w(self, neighbor):
         return self.adjacent[neighbor]
+
+    def return_name(self):
+        return self.name
 
 
 # implementation of a class for sparse graph
@@ -27,7 +30,7 @@ class SGraph:
                 self.e_dict.pop(pair)
 
     def add_edge(self, u, v, w):
-        self.e_dict[(u, v)] = w
+        self.e_dict[(u, v)] = int(w)
         self.edge_num = self.edge_num + 1
 
     def remove_edge(self, u, v):
@@ -64,7 +67,7 @@ class SGraph:
             v_name.append(pair[1])
 
         v_uni = list(set(v_name))
-        print(v_uni)
+        return v_uni
 
     def set_vertex_value(self, v, new_val):
         for pair in self.e_dict:
@@ -80,6 +83,9 @@ class SGraph:
     def print_graph(self):
         for pair, weight in self.e_dict.items():
             print("edge: {}, w={}".format(pair, weight))
+
+    def return_edges(self):
+        return self.e_dict
 
 
 # implementation of a class for dense graph
@@ -148,7 +154,7 @@ class DGraph:
     def print_graph(self):
         for key in self.v_dict:
             for u, w in self.v_dict[key].adjacent.items():
-                print("vertex [{}] to [{}], w={}".format(key, u, w))
-
+                print("{} {} {}".format(key, u, w), end=';')
+        print('\n')
 
 

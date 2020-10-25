@@ -28,39 +28,43 @@ def randomTest():
 if __name__ == '__main__':
     '''random or input txt'''
     fib, answer = receiveTxt()
-    while True:
-        fib, answer = randomTest()
-        input_txt = copy.deepcopy(answer)
-        # print(answer)
-        result = []
-        answer.sort()
-        # print(answer)
-        while fib.minimum():
-            result.append(fib.minimum().key)
-            fib.extract_min()
-        # print(result)
-        if result != answer:
-            print(input_txt)
-            print(answer)
-            print(result)
-            break
+    # while True:
+    #     fib, answer = randomTest()
+    #     input_txt = copy.deepcopy(answer)
+    #     # print(answer)
+    #     result = []
+    #     answer.sort()
+    #     # print(answer)
+    #     while fib.minimum():
+    #         result.append(fib.minimum().key)
+    #         fib.extract_min()
+    #     # print(result)
+    #     if result != answer:
+    #         print(input_txt)
+    #         print(answer)
+    #         print(result)
+    #         break
 
 
 
     '''pre insert test'''
 
-    # fib_copy = copy.deepcopy(fib)
-    # answer.sort()
-    # print(answer)
-    # pre_result = []
-    # count = 0
-    # while fib_copy.minimum():
-    #     pre_result.append(fib_copy.minimum().key)
-    #     fib_copy.extract_min()
-    #     if verbose:
-    #         count = count + 1
-    #         print("**** EM time {} finish****".format(count))
-    #
-    # print(pre_result)
-    #
-    # fib.shell()
+    fib_copy = copy.deepcopy(fib)
+    answer.sort()
+    print(answer)
+    pre_result = []
+    count = 0
+    while fib_copy.minimum():
+        pre_result.append(fib_copy.minimum().key)
+        fib_copy.extract_min()
+        if verbose:
+            count = count + 1
+            print("**** EM time {} finish****, Decrease key".format(count))
+            to_de = fib_copy.h_min.right
+            if to_de.degree != 0:
+                to_de = to_de.child
+            fib_copy.decrease_key(to_de, to_de.key - 20)
+
+    print(pre_result)
+
+    fib.shell()

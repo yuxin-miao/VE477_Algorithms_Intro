@@ -1,12 +1,13 @@
 import math
 
 
-verbose = False
+verbose = True
 
 
 class Node:
-    def __init__(self, key=0, parent=None, child=None, degree=0, mark=False):
+    def __init__(self, key=0, value=None, parent=None, child=None, degree=0, mark=False):
         self.key = key
+        self.value = value  # used for dijkstra
         self.parent = parent
         self.child = child
         self.degree = degree
@@ -24,7 +25,7 @@ class FibHeap:
 
     def __remove_from_list(self, x):
         if verbose:
-            print("1. remove x [{}] from x's list, result: ".format(x.key), end='')
+            print("(1.) remove x [{}] from x's list, result: ".format(x.key))
         if x.right is x:
             return None
         else:
@@ -42,7 +43,7 @@ class FibHeap:
         if y is x:
             return
         if verbose:
-            print("2. add y [{}] into x[{}]'s list at x left, result: ".format(y.key, x.key), end='')
+            print("(2.) add y [{}] into x[{}]'s list at x left, result: ".format(y.key, x.key), end='')
         # y.left = y.right = y  # to insert, make sure y is a single element
         y.right = x
         x.left.right = y
@@ -51,8 +52,8 @@ class FibHeap:
         if verbose:
             printList(x)
 
-    def insert(self, x):
-        new_node = Node(key=x)
+    def insert(self, x, vertex=None):
+        new_node = Node(key=x, value=vertex)
         if not self.h_min:  # the heap is empty
             self.h_min = new_node
         else:  # insert the new_node into root list
@@ -61,6 +62,7 @@ class FibHeap:
                 self.h_min = new_node
         self.n = self.n + 1  # increase the root number of H
         # print(self.h_min.key)
+        return new_node
 
     def minimum(self):
         return self.h_min
@@ -183,6 +185,8 @@ class FibHeap:
 
     def __cut(self, x, y):
         # x.parent = y, _cut x and y
+        if verbose:
+            print("cut x[{}] (as child) from y[{}]".format(x.key, y.key))
         check = (x == x.right)
         self.__remove_from_list(x)
         if check:  # x is the only element in this list
@@ -194,6 +198,8 @@ class FibHeap:
         y.degree = y.degree - 1
 
     def __cas_cut(self, y):
+        if verbose:
+            print("cas_cut y[{}]".format(y.key))
         z = y.parent
         if not z:
             return
@@ -205,6 +211,8 @@ class FibHeap:
 
     def decrease_key(self, x, k):
         # EFFECTS: decrease the key of x to k
+        if verbose:
+            print("decrease key [{}] to [{}]".format(x.key, k))
         if k > x.key:  # could not decrease
             return
         x.key = k
@@ -271,6 +279,12 @@ class FibHeap:
             elif cmd == 'em':
                 node = self.extract_min()
                 print("ExtractMin: {}".format(node.key))
+                ptr = self.h_min
+            elif cmd == 'de':
+                to_de = self.h_min
+                to_de = to_de.right
+                self.decrease_key(to_de, 2)
+                print("Decrease key")
                 ptr = self.h_min
 
 
