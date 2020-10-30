@@ -1,0 +1,242 @@
+
+% Preamble
+\documentclass{assignment}
+
+% Packages
+\usepackage{minted}
+\usepackage{dsfont}
+\usepackage{colortbl}
+\usepackage[linesnumbered,ruled,longend]{algorithm2e} \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+
+\SetKwInOut{Input}{Input} \SetKwInOut{Output}{Output} \SetKwProg{Fn}{Function}{\string:}{end} \SetKwFunction{algohw}{Reconstruct}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+    \newpage
+
+	% Q1
+	
+	\begin{homeworkProblem}
+	\begin{enumerate}
+	\item \textit{Linear partition problem:} A given arrangement $S$ consisting $n$ nonnegative integers ${s_1, ...,s_n}$ and an integer $k$, partition $S$ into $k$ ranges so as to minimize the maximum sum over all the ranges. 
+	
+	Often arises in parallel processing, because of the demand to balance the work done across processors so to minimize the total elapsed run time.
+	\item No, not a good solution. It will not systematically evaluate all the possibilities. Consider $S=\{3, 3, 3, 2, 5, 5\} $ and $k=3$. With the this approach we have the average size of partition as $21/3=7$, then the set will be divided as $3, 3\ ||\  3, 2\ ||\ 5, 5$ with maximum sum as $10$. However, the solution should be  $3,3,3\ ||\ 2,5\ ||\ 5$ with maximum sum as $9$. 
+	\item 
+	The problem could be transformed into finding the minimum value of the lager one between 1) cost of the last partition $ \sum_{j=i+1}^n s_j $ and 2) the cost of the largest partition cost formed to the left of $i$. 
+	\begin{align*}
+M(n, k) &= min_{i=1}^n \ max(M[i, k-1], \sum_{j=i+1}^n s_j) \\
+\rm{With\ Basis}\ M[1,k] &= s_1, \forall k>0 \\
+M[n,1] &= \sum_{i=1}^ns_i	
+	\end{align*}
+	\item 
+	If keep $M[i][j] \ \forall i\leq n, j\leq k$, total cell will be $k \cdot n$ in this table. 
+	For any $M[n'][k']$, need to find the minimum among $n'$ quantities, each of which is the maximum through table lookup and a sum of at most $n'$ elements. Then fill each cell need $\mathcal{O}(n^2)$. So total need $\mathcal{O}(kn^3) = \mathcal{O}(n^3)$
+	\item When update  each cell, instead of selecting the best of up to n possible points to place the divider, each of which need to sum up to n possible terms, we could store the set of $n$ prefixes sum 
+	$$p[i]=\sum_{k=1}^is_k,\ \rm{since}\ p[i] = p[i-1] + s_i$$
+	\item  Dynamic programming approach 
+	
+	
+	\begin{algorithm}[H]
+\Input{arrangement $S$ consisting $n$ nonnegative integers ${s_1, ...,s_n}$ and an integer $k$}
+\Output{the cost of the largest range when partition $S$ into $k$ ranges so as to minimize the maximum sum over all the ranges} \BlankLine
+\tcc{compute prefix sum}
+$p[0]\leftarrow 0$  \\
+\For{$i \leftarrow 1$ \KwTo n} {
+$p[i] \leftarrow p[i-1] + s_i$\\
+}
+\tcc{boundary condition}
+\For {$i \leftarrow 1$ \KwTo n} {
+$M[i, 1] \leftarrow p[i]$ \\
+}
+
+\For {$j \leftarrow 1$ \KwTo k} {
+$M[1, j] \leftarrow s_1$ \\
+}
+\tcc{evaluate main recurrence}
+\For {$i \leftarrow 2$ \KwTo n} {
+	\For {$j \leftarrow 2$ \KwTo k} {
+		$M[i, j] \leftarrow \infty$ \\
+		\For {$x \leftarrow 1$ \KwTo i - 1} {
+			$s \leftarrow max(M[x, j-1], p[i]-p[x]) $\\
+			\If{M[i,j] $>$ s} {
+			$M[i,j] \leftarrow s$ \\
+			$D[i,j] \leftarrow x$ \tcc*[r]{ used to reconstruct}
+			
+			}
+		}
+			
+	}
+}
+\KwRet{M[n,k]}
+
+\caption{Linear Partition Problem} \end{algorithm}
+	
+	
+	\item First the prefix sum and boundary condition is obviously true. It settle the smallest possible values for each of the arguments of the recurrence. With the evaluation order such that computes the smaller values before the bigger values, it will obtain the right result as long the previous results are true, which must be true as the boundary conditions are true.
+\item 	When update each cell, we do not need to select the best among n possible points to place the divider because of the prefix sum we stored. So for each call, only need linear time. Then the total time complexity would be $\mathcal{O}(kn^2)$.
+
+\item This could be achieved by $D$, as it record which divider position required to achieve such cost. So to reconstruct the path used to get to the optimal solution, we work backward from $D[n,k]$ and add a divider at each specified position.
+
+ 
+     \begin{algorithm}[H]
+\Input{S, D, n, k}
+\Output{S with divider} \BlankLine
+\Fn{\algohw{S, D, n, k}} {
+\uIf{k == 1} {
+print the first partition $(s_1, s_2, ..., s_n)$ \\
+}
+\Else {
+\algohw{S, D, D[n,k], k-1} \\
+print the $k-th$ partition $(s_{D[n,k]+1}, ..., s_n)$
+}
+}
+
+\caption{Reconstruct} \end{algorithm}
+    
+	
+	\end{enumerate}
+	
+	\end{homeworkProblem}
+	% Q2
+	\begin{homeworkProblem}
+	As $B$ would produce number $0,1,2,3,4$ with equal probability $1/5$, we could get number in range $[0,24]$ by $B*5 + B$ with equal 	probability $1/25$. And if drop the number that larger than $23$, the probability for generating number in $[0, 23]$ is $1/24$. Then the number in $[0, 7]$  with equal probability could be obtained by $[0,23] / 3 = 1/8$, which returns the integer part of the result.
+	
+	\textit{To extend the generation procedure}, the critical part is to generate numbers larger than expected $n$ ($[0,24]$ previously) with equal probability. 
+	\begin{enumerate}
+	\item[•] Denote the original $B$ that produce $[0,4]$ as $B_0$
+	\item[•] Denote that produce $[0,24]$ as $B_1$ such that $B_1=5*B_0 + B_0=(5+1)$
+	\item[•] $B_2=25*B_0+B_1$ produce $[0, 124]$ with equal probability as $1/125$
+	\item[•]$B_3=125*B_0 + B_2$ produce $[0, 624]$ with equal probability $1/625$
+	\end{enumerate}
+
+	Then summarize as 
+	
+	$$Range[B_n] = [0, 5^{n+1}-1],\ \rm{with}\ P=\frac{1}{5^{n+1}}$$
+	
+	Therefore, we could use the original $B$, to have any generator $B_i$ we need  to produce number in range $[0, 5^{i+1}-1]$. Restriction on $n$ will be $n\geq 0$. 
+	
+As in the previous example, the random number in $[0,7]$ is obtained through $(B_1.output<24)/3$. Because the range is $[0, 5^2-1]=[0, 24]$, which is too large if we just simply keep the number that $B_1.output \leq 7$. So we could apply the same method that find an integer $a$ such that 
+		$$ a*n < 5^{i+1}-1, \quad where\ 5^{i} -1 < n \leq 5^{i+1} -1$$
+The the random number is $B_i.output/a$		
+		
+	\newpage 
+	     \begin{algorithm}[H]
+\Input{nonnegative integer $n$}
+\Output{a random number in range $[0, n]$} \BlankLine
+Find $i$ that $5^{i} -1 < n \leq 5^{i+1} -1$\\
+$a\leftarrow 1$ \\
+
+\While{(a+1)*(n+1) $\leq 5^{i+1} -1$} {
+$a \leftarrow a + 1$
+}
+Get the random number generator $B_i$  \\
+$num \leftarrow B_i.output$ \\
+\While{num $>$ (n+1)*a}{
+$num \leftarrow B_i.output$  }
+\KwRet{num/a} 
+\caption{Random Number Generator} \end{algorithm}
+    
+	
+	\end{homeworkProblem}
+	%Q3
+	\begin{homeworkProblem}
+	    Bellman-ford algorithm 
+	     
+ 
+     \begin{algorithm}[H]
+\Input{weighted graph $G=(V,E)$}
+\Output{whether the graph has negative cycle} \BlankLine
+Chosen a vertex $s$ randomly \\ 
+\tcc{Initialization}
+\For{each vertex v $\in$ G.V} {
+$v.d \leftarrow \infty$ \\
+}
+$s.d \leftarrow 0$ \\
+\tcc{Relax}
+\For {$i \leftarrow 1$ \KwTo $|G.V| - 1$} {
+	\For {each edge $(u,v) \in G.E$} {
+		\If {v.d $> u.d$ + w(u,v)} {
+			$v.d \leftarrow u.d + w(u,v)	$\\	
+		}
+	}
+}
+
+\For {each edge $(u,v) \in G.E$} {
+		\If {v.d $> u.d$ + w(u,v)} 
+		{ 
+		
+			\KwRet{True} \tcc*[r]{only possible when negative cycle exists}
+
+}}
+\KwRet{False}
+\caption{Detect negative cycle} \end{algorithm}
+    
+	    	
+	\end{homeworkProblem}
+    \begin{homeworkProblem}
+	\begin{enumerate}
+	\item
+	Obviously $1 \leq k \leq n$, otherwise the statement would not be true. To prove, because the hash table has $n$ slots and the probability of $n$ keys to hash to any slot is equal, for each key, it has a probability of $\frac{1}{n}$ to hash to any slot. So the number of keys hash to a same slot follows a binomial distribution with parameter $n$ and $p$, where $p=\frac{1}{n}$. Then the probability for exactly k keys hash to a same plot is $$P_k = \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \binom n k.$$
+	\item The probability of a slot to have $k$ keys is $P_k$. More than one slots may have k keys, but no slots would have more than k keys. Then, $P_k' = $the probability of at least one slot has $k$ keys and other slots have no more than $k$ keys, which is \textbf{smaller or equal} to the probability that at least one slot has $k$ keys. Because we have $n$ slots, the probability of only one slot has $k$ keys is $\binom n 1 P_k = nP_k,$ and this probability is \textbf{larger or equal} to the probability that at least one slot has $k$ keys. Through this two inequality, $P_k' \leq nP_k$.
+	\item We have Stirling formula $n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n,$ and $1 \leq k\leq n$
+		\begin{equation*}
+	\begin{aligned}
+	P_k &= \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \frac{n!}{k!(n-k)!} \\
+	&\approx \frac{\sqrt{2 \pi n}\left(\frac{n}{e}\right)^n}{\sqrt{2 \pi (n-k)}\left(\frac{n-k}{e}\right)^{n-k}k!} \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \\
+	&=\sqrt{ \frac{n}{n-k}} \left(\frac{n}{n-k} \frac{n-1}{n}\right)^n \left(\frac{n-k}{e} \frac{1}{n}\frac{n}{n-1}\right)^{k} \frac{1}{\sqrt{2 \pi k}\left(\frac{k}{e}\right)^k} \\
+	& < \sqrt{ \frac{n}{2 \pi k(n-k)}}   \frac{e^{-k}}{\left(\frac{k}{e}\right)^k} \\
+	&< \frac{e^k}{k^k}
+	\end{aligned}
+	\end{equation*}
+	
+	
+	
+	\end{enumerate}
+    	
+    \end{homeworkProblem}
+    
+    
+    % Q2
+    \begin{homeworkProblem}
+
+Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an edge $e$ is decreased where $e \notin T$, $e=(u,v)$.
+
+ 
+     \begin{algorithm}[H]
+\Input{this file}
+\Output{nice algorithms in the homework} \BlankLine
+\Fn{\algohw{this file}}{
+download file\;
+open file\;
+compile file\;
+\While{not at end of this document}{
+read\; \uIf{understand}{
+go to next line\;
+current line becomes this one\; }
+\uElseIf{want to know more on algorithms in \LaTeX} {refer to \href{http://tug.ctan.org/tex-archive/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf} {algorithm2e documentation}}
+\Else {restart reading from the beginning\;} }
+\For{exercise $\leftarrow$ 1 \KwTo 7}{ \If{algorithm is requested} {
+solve the problem\;
+A[$exercise$] $\leftarrow $ write the algorithm in \LaTeX\; }
+}
+\KwRet{A} }
+\caption{Algorithms in the homework} \end{algorithm}
+    
+    \end{homeworkProblem}
+    
+    %Q3
+    \begin{homeworkProblem}
+    
+    
+    \end{homeworkProblem}
+    
+
+
+
+
+\end{document}

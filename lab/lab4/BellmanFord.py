@@ -22,7 +22,7 @@ for i in range(len(dis) - 1):
             prev[edge[1]] = edge[0]
 
 result = [end_point]
-while end_point is not start_point:
+while end_point != start_point:
     result.insert(0, prev[end_point])
     end_point = prev[end_point]
 

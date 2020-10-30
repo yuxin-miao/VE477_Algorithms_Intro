@@ -35,6 +35,71 @@ P问题是在多项式时间内可以被解决的问题，而NP问题是在多�
 
 $NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/截屏2020-10-10 上午10.09.31.png" alt="截屏2020-10-10 上午10.09.31" style="zoom:50%;" />
 
+- PSPACE completeness 
+
+  **SPACE:** denote the set of all the decision problems which can be solved by a Turing machien in $\mathcal{O}(s(n))$ space for some function $s$ of the input size $n$. **PSPACE** is defined as 
+  $$
+  PSPACE = \cup_{k} SPACE(n^k)
+  $$
+  **PSPACE-complete:** 1. in PSPACE 2. for all $P$ in PSPACE, $P$ can be reduced in polynomial space the to $PSPACE-complete$
+
+  
+
+
+
+
+
+**halting problem:** undecidable. Do not belong to $NP$. $NP-hard$. reduce SAT to Halting problem 
+
+1. **SAT**
+
+   boolean satisfiability problem: NP-complete 
+
+2. **TQBF**: PSPACE-complete and NP-hard 
+
+   True Quantiffied Boolean Formula: can be solved in exponential time and polynomial space.
+
+   - when quantifier $\forall$, the both $x_i=0or1$ should be evaluted true 
+   - $\exists$, only one of them 
+
+   Then each time recursive call will give at most 2 way, then $\mathcal{O}(n^2)$
+
+3. **Hilbert’s tenth problem**
+
+   Given a Diophantine equation, with any number of unkown quantities and with rational integral numerical coefficients, decide whether the equation is solvable in rational numbers (decision problem).
+
+
+
+4. **3-SAT**
+
+   *example of how to proceed to evaluate the complexity class of a given problem*
+
+   > cnf: conjunctive normal form: if a boolean formula is written as the conjunction of disjunctive clauses.
+
+   3-SAT is NP-complete: 
+
+   - 3-SAT is in $NP$ (clearly as it is a particular case of SAT)
+
+   - in $NP-complete$ that being able to solve it means being able to solve SAT, the proposed transformation is applicable in polynomial time  
+
+     Convert a cnf-formula $F$ to a 3cnf-formula $F’$ (then could transform any instance of SAT into an instance of 3-SAT)
+
+     Denote each clause in $F$ as $C_1, C_2, ...,C_k$
+     a. For clause has one literal as $x_1$, change to $(x_1\lor x_1 \lor x_1)$
+     b. For clause has two literals as $(x_1\lor x_2)$, change to $(x_1\lor x_2 \lor x_1)$
+     c. For clause has more than three literals as $(x_1\lor x_2\lor ... \lor x_m)$, introduce new variable $z_i$ change to $(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land ... \land (\neg z_{m-3}\lor x_{m-1} \lor x_m)$
+
+     *an example:*
+     ![image-20201023132044585](/Users/yuxinmiao/CLionProjects/VE477/image-20201023132044585.png)
+
+     ​	Then we could rewrite it as  
+
+     ​	$$\begin{align*}
+     &(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor\neg x_6)\land \\
+     &(\neg x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor\neg x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor x_6)\land \\
+     &( x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor \neg x_6)\land \\
+     &(x_1 \lor \neg x_2 \lor x_1)\end{align*}$$
+
 ## Time complexity
 
 - stirling’s formula $n! \approx \sqrt{2\pi n}(\frac{n}{e} )^n$
@@ -100,28 +165,6 @@ A sufficient condition of Big-Oh
     3. in binary search, a=1, b=2, d=0
 
 
-
-## NP
-
-Convert a cnf-formula $F$ to a 3cnf-formula $F'$
-
-Denote each clause in $F$ as $C_1, C_2, ...,C_k$
-a. For clause has one literal as $x_1$, change to $(x_1\lor x_1 \lor x_1)$
-b. For clause has two literals as $(x_1\lor x_2)$, change to $(x_1\lor x_2 \lor x_1)$
-c. For clause has more than three literals as $(x_1\lor x_2\lor ... \lor x_m)$, introduce new variable $z_i$ change to $(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land ... \land (\neg z_{m-3}\lor x_{m-1} \lor x_m)$
-
-
-
-
-
-![image-20201023132044585](/Users/yuxinmiao/CLionProjects/VE477/477image/image-20201023132044585.png)
-
-Then we could rewrite it as 
-$$\begin{align*}
-&(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor\neg x_6)\land \\
-&(\neg x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor\neg x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor x_6)\land \\
-&( x_1\lor \neg x_2 \lor z_1)\land (\neg z_1\lor \neg x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land (\neg z_3\lor x_5 \lor \neg x_6)\land \\
-&(x_1 \lor \neg x_2 \lor x_1)\end{align*}$$
 
 ## Divide-and-conquer Approach
 
@@ -350,27 +393,78 @@ Proof by induction:
 
 ## Dynamic Programming
 
+idea behind DP:
+
+- break a complex problem into simpler subproblems 
+- store the result of the overlapping subproblems 
+- do not recompute the same information again and again
+- do not waste memory because of recursion
+
+*saves both time and space*
+
+- simple idea dramatically improving space-time complexity
+- cover all the possibilities at the subproblem level
+- efficient as long as the number of subproblems remains polynomial 
+
+eg: fibnonacci number naive way: do recursion 
+
+1. **Memorized DP**: recursion + memorization 
+
+​	**time = #of sub problems $\cdot$ time/subproblem **
+
+```pseudocode
+mem={}
+fib(n):
+	if n in mem: return mem[n]
+	else:
+		if n <= 2: f = 1
+		else: f = fib(n-1) + fib(n-2)
+		mem[n] = f
+		return f
+// # of subproblem:n & time/subproblem is \Theta(1)
+```
+
+- fib(k) only recurses when it is first called
+- only n nonmemorized calls: k=n, n-1, … 1
+- memorized call free ($\Theta(1)$ time)
+- could ignore recursion, $\Theta(1)$ time per call
+
 https://www.zhihu.com/question/23995189
 
-### intro
+2. **Bottom-up DP**
 
-用尽量少的1，5，11凑出15；贪心策略$15 = 1 * 11 + 4 *1$, 五张。
+   ```pseudocode
+   fib = {}
+   for k in [1,2, ...,n]: # n loops, each call is \Theta(1)
+   		if k <= 2: f = 1
+   		else: f = fib(n-1) + fib(n-2)
+   		fib[k] = f
+   return fib[n]
+   // same computation as do not need to count for recursion but save space 
+   ```
 
-正确的为$15 = 3 * 5$， 三张。 贪心策略为尽量使之后面对的w更少，只考虑眼前情况
+   
 
-用$f(n)$ 表示凑出n所需要的最少数量。与1，5，11各用了多少无关。
+ **intro**
 
-Cost = f(4) + 11 / f(10) + 5 / f(14) + 1 -> $f(n) = min\{ f(n-1),f(n-5),f(n-11)\} + 1 $
+​	用尽量少的1，5，11凑出15；贪心策略$15 = 1 * 11 + 4 *1$, 五张。
 
-以$\mathcal{O}(n)$ 复杂度解决
+​	正确的为$15 = 3 * 5$， 三张。 贪心策略为尽量使之后面对的w更少，只考虑眼前情况
+
+​	用$f(n)$ 表示凑出n所需要的最少数量。与1，5，11各用了多少无关。
+
+​	Cost = f(4) + 11 / f(10) + 5 / f(14) + 1 -> $f(n) = min\{ f(n-1),f(n-5),f(n-11)\} + 1 $
+
+​	以$\mathcal{O}(n)$ 复杂度解决
 
 - 将一个问题拆成几个子问题，分别求解这些子问题，即可推断出大问题的解
 
 - Definitions: (DP 需要满足的前提)
+  
   - 无后效性：确定f(n)后，如何凑出f(n)即无关
   - 最优子结构: f(n)即为小问题的**最优解**， 因此可以得出大问题的**最优解**
-
-DP: 枚举有可能成为答案的解，自带剪枝 - 尽量缩小可能解空间
+  
+  DP: 枚举有可能成为答案的解，自带剪枝 - 尽量缩小可能解空间
 
 ### knapsack problem
 
@@ -395,9 +489,67 @@ else
 	// OR any previous state experinced a value 'j - A[i]'
 ```
 
-STEP
 
-1. 
+
+### Shortest path 
+
+> Implementation:  dij & bellmanford in VE477 lab5 (lab4: fib heap)
+
+*shortest path in weighted graph:* Given a connected, simple, weighted graph, and two vertices $s$ and $t$, find the shortest path that joins $s$ to $t$. 
+
+- Egdes only have positive weights
+- Edges have positive and negative egdes
+
+1. Dijkastrs’s algorithm: only for solving the case 1, could not deal with negative weights. (no DP involved)
+2. Bellman-Ford: take advantage of DP 
+
+Subproblem dependency should be acyclic
+
+
+
+### String
+
+when subproblem for strings: (all polynomial)
+
+- Suffixes $x[i:], \forall i$	$\Theta(n)$
+- prefixes $x[:i,], \forall i$    $\Theta(n)$
+- substrings $x[i:j], \forall\ i\leq j$    $\Theta(n^2)$
+
+
+
+
+
+1. Edit Distance:
+
+   given two string $x$ and $y$, the cheapest possible sequence of character edits to turn $x\rightarrow y$. 
+
+   ​	ALLOW:
+
+   -  Insert $c$
+   - Delete $c$
+   - replace $c$ with $c'$
+
+   *SUBPROBLEM*: $x[i:]\&y[j:]\ \forall i,j$ then  $\Theta(|x|\cdot|y|)$
+
+   *GUESS:* one of three allowed possibilities 
+
+   *RECURRENCE:* DP(i, j) = min{ *(cost of repalce x[i]->y[j] + DP(i+1, j+1)* , *cost of insert y[j] + DP(i, j+1)*, *cost of delete x[i] + DP(i+1, j)*}
+
+   *TOPO ORDER:* i: |x| -> 0 
+
+   ​							j: |y| ->0
+
+   *DP*($\emptyset, \O$)
+
+   Time comlexity: subproblem $\Theta(1)$. Total: $\Theta(|x|\cdot|y|)$
+
+longest common sequence: $HELLO$ for these two words 
+
+$x: HIEROGLYPHOLOGY$
+
+$y: MICHAELANGELO$
+
+
 
 ## Union-Find
 
@@ -467,9 +619,9 @@ The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
 
 
-## MST (Minimum Spnning Tree)
+## MST
 
-> Implement: lab2
+> Implement: VE477 lab2  (Minimum Spnning Tree)
 
 1. Definitions
 
@@ -509,6 +661,12 @@ The complexity of Union-Find structure is $\Omega(\alpha(n))$
    - for edges in $G.E$ in non-decreasing order, adding them into $T$ if no cycle would be created 
 
    To check whether a cycle will be created, union find: whether two edges have the same root `Find` ; add them: `Union`
+
+
+
+## Network flow
+
+网络流问题
 
 ## Algo. Examples
 
@@ -658,7 +816,7 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
 
    <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930145346318.png" alt="image-20200930145346318" style="zoom: 33%;" />![image-20200930150757482](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150757482.png)
 
-   ![image-20200930150757482](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150757482.png)
+   
 
 ### Size rehashing
 
@@ -830,6 +988,37 @@ For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalance
   * 右->左：父节点向右，祖父向左
 * 只需修复一次
 
+
+
+## Heap
+
+MAX heap as example 
+
+Array `A` and index `i`
+
+- `MAX HEAPIFY(A, i)`: Assume that the tree rooted at `left(i)` and `right(i)` are max heaps 
+
+  time complexity: the level of the tree $O(logn)$
+
+
+
+Convert `A[1, ... ,n]` into a max heap (element `A[n/2+1, ..., n]` are all leaves, for any n)
+
+```pseudocode
+Build-maxHeap(A):					// O(n)
+	for i=n/2 down to 1:
+		MAX_HEAPIFY(A, i)
+
+```
+
+Observation: MAX_Heapify takes constant time for nodes that are leaves, take $O(l)$ time for nodes $l$ level above the nodes 
+
+Total amout of work: $n/4(1 c) + n/8(2c) + n/16(3c) + 1(lgnc)$
+
+set $n/4=2^k$
+$$
+
+$$
 
 
 ## Fibinacci heap

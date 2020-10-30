@@ -1,7 +1,6 @@
 import math
 
-
-verbose = True
+verbose = False
 
 
 class Node:
@@ -232,62 +231,6 @@ class FibHeap:
         # printRootList(self)
         self.extract_min()
 
-    def shell(self):
-        ptr = self.h_min
-        if ptr is None:
-            return 0
-
-        while True:
-            cmdLine = input("fib> ")
-            cmdLine = cmdLine.split(' ')
-            cmd = cmdLine[0]
-
-            if cmd == 'exit':
-                return 0
-            elif cmd == 'cur' or cmd == 'current':
-                print("Current Key: {}".format(ptr.key))
-            elif cmd == 'min':
-                ptr = self.h_min
-                print("Back to min: {}".format(ptr.key))
-            elif cmd == 'ls':
-                if ptr is None:
-                    print("List: empty")
-                else:
-                    printList(ptr)
-            elif cmd == 'child':
-                printList(ptr.child)
-            elif cmd == 'i' or cmd == 'insert':
-                self.insert(int(cmdLine[1]))
-            elif cmd == 'l' or cmd == 'left':
-                print('Move left: {0} <- {1}'.format(ptr.left.key, ptr.key))
-                ptr = ptr.left
-            elif cmd == 'r' or cmd == 'right':
-                print('Move right: {0} -> {1}'.format(ptr.key, ptr.right.key))
-                ptr = ptr.right
-            elif cmd == 'gc':
-                if ptr.child is None:
-                    print('[{}]: no child to go'.format(ptr.key))
-                else:
-                    print('[{0}]: go to child {1}'.format(ptr.key, ptr.child.key))
-                    ptr = ptr.child
-            elif cmd == 'gp':
-                if ptr.parent is None:
-                    print('[{}]: no parent to go'.format(ptr.key))
-                else:
-                    print('[{0}]: go to parent {1}'.format(ptr.key, ptr.parent.key))
-                    ptr = ptr.parent
-            elif cmd == 'em':
-                node = self.extract_min()
-                print("ExtractMin: {}".format(node.key))
-                ptr = self.h_min
-            elif cmd == 'de':
-                to_de = self.h_min
-                to_de = to_de.right
-                self.decrease_key(to_de, 2)
-                print("Decrease key")
-                ptr = self.h_min
-
-
 
 def printRootList(h: 'FibHeap'):
     print("root list: " + str(h.h_min.key), end=' ')
@@ -322,7 +265,6 @@ def printList(node: 'Node'):
         print(x.key, end=' ')
         x = x.right
     print('\n')
-
 
 # fib = FibHeap()
 # fib2 = FibHeap()
