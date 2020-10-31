@@ -1,0 +1,71 @@
+\documentclass[catalog.tex]{subfiles}
+
+% do not write anything in the preamble
+
+\begin{document}
+
+\def\pbname{Fibonacci heaps} %change this, do not use any number, just the name
+
+\section{\pbname} 
+
+% only for overview, so short description (no more than 1-2 lines)
+\begin{overview}
+\item [Algorithm:] Fibonacci heaps~(algo.~\ref{alg:\currfilebase}) 
+	% -	must match the label of the algorithm 
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+\item [Input:] 
+\item [Complexity:] $O(logn)$ for EXTRACT-MIN and DELETE, $O(1)$ for other operations 
+\item [Data structure compatibility:] Fibonacci heap as a data structure, implemented through linked list 
+\item [Common applications:] Dijkstra's shortest path algorithm
+\end{overview}
+
+
+\begin{problem}{\pbname}
+	The original motivation is to improve the Dijkstra's shortest path algorithm. First, it supports a set of operations that constitutes what is known as a “mergeable heap.” Second, several Fibonacci-heap operations run in constant amortized time, which makes this data structure well suited for applications that invoke these operations frequently \cite{1}.
+\end{problem}
+
+
+\subsection*{Description}
+As a data structure that constructs a mergeable heap, it supports operation \textit{MAKE-HEAP(), INSERT(H,x), MINIMUM(H), EXTRACT-MIN(H), UNION($H_1$, $H_2$), DECREASE-KEY(H,x,k), DELETE(H,x)}, where $H$ is a fibonacci heap and $x$ is an element, $k$ is a new key value. 
+
+As a implementation of priority queue, its has good amortized time complexity, compare to linked list, binary heap or binomial heap (\textit{MELD} stands for \textit{UNION}) \cite{2}.
+\begin{figure}[!htb]
+	\centering
+\includegraphics[scale=0.6]{\currfilebase_a}
+	\caption{Comparison of Priority Queue Performance}
+\end{figure}
+
+\textbf{Structure:} 
+\begin{enumerate}
+\item[•] A set of heap ordered trees, such that in each tree, $child.key \geq parent.key$. 
+\item[•] Heap store a pointer of the minimum node. Root list is maintained through circular, doubly linked-list.\item[•] Node has a pointer to its parent; a pointer to any of its children; a pointer to its left and right siblings; its degree (number of children); whether marked.
+\end{enumerate}
+\textbf{Analyze of Time complexity:} 
+
+For a given Fibonacci heap, potential function: $\Phi(H)=trees(H)+2\cdot marks(H)$. For each operation, analyze the actual cost, change in potential and amortized cost. 
+\begin{enumerate}
+\item[•] \textit{Insert:} $c_i=O(1),\quad \Delta \Phi = \Phi (H_i) - \Phi (H_{i-1})=+1,\quad \hat{c}_i = c_i + \Delta \Phi = O(1)$
+\item[•] \textit{Extract Min:} $c_i=O(rank(H)) + O(trees(H)),\quad \Delta \Phi \leq  rank(H') + 1 - trees(H),\quad \hat{c}_i = c_i + \Delta \Phi = O(logn)$
+\item[•] \textit{Decrease Key:} Denote the number of cuts as $c$, $O(1)$ for each cut and meld it into root list, $c_i=O(c),\quad \Delta \Phi =  O(1) - c,\quad \hat{c}_i = c_i + \Delta \Phi = O(1)$
+\item[•] \textit{Union:} $c_i=O(1),\quad \Delta \Phi =  0,\quad \hat{c}_i = c_i + \Delta \Phi = O(1)$
+\item[•] \textit{Delete:} Achieved by \textit{Decrease Key} and \textit{Extract Min}, so $\hat{c}_i = O(rank(H))$
+\end{enumerate}
+\textit{How to analyze rank(H)}
+
+A Fibonacci heap with $n$ elements, then $rank(H)\leq log_{\Phi }m$, where $\Phi$ is the golden ratio $=(1/ \sqrt{5})/2 \approx 1.618$.
+\textbf{Discussion:}
+
+The difficulty of implementation and the constant  factor make it not so practical in real life. It will be useful for large data size. The $\Theta (1)$ amortized time of \textit{Decrease Key, Extract Min, Delete} make it desirable when number of such operations needed. So computing minimum spanning tree, finding single-sourse shortest paths make essential use of it. 
+
+It is named as ``Fibonacci Heap" because Fibonacci numbers are used in running time analysis. Every node in Fibonacci Heap has at most degree at $O(logn)$. The size of a subtree rooted in a node of degree $k$ is at least $F_{k+1}$, where $F_k$ is the $k-$th Fibonacci number. 
+
+% include references where to find information on the given problem using latex bibliography
+% insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
+% prefer books, research articles, or internet sources that are likely to remain available over time
+% as much as possible offer several options, including at least one which provide a detailed study of the problem
+% if available include links to programs/code solving the problem
+% wikipedia is NOT acceptable as a unique reference
+\singlespacing
+\printbibliography[title={References.},resetnumbers=true,heading=subbibliography]
+
+\end{document}
