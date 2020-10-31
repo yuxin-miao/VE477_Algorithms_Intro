@@ -668,11 +668,39 @@ The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
 网络流问题
 
+<img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201030194352143.png" alt="image-20201030194352143" style="zoom:50%;" />
+
+- 对flow的限制：容量限制和流量守恒
+- Antiparallel: $(v_1,v_2)\in E \ and \ (v_2,v_1)\in E$ 
+- multiple source and/or sink nodes: super node 
+
+**Maximum Network Flow Problem**
+
+- Residual graph $G_f$. ($|E_f|\leq 2|E|$) 残存图
+
+  <img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201030200750115.png" alt="image-20201030200750115" style="zoom:50%;" />
+
+- Argumenting path 增广路径. Residual capacity: on an argumenting path $p$, the maximum flow that could be added to each edge s. 将沿着增广路径重复增加路径上的流量直到找到一个最大流. How to know we find a maximum flow? A flow is the maximum flow if and only if no argumenting path in the residual networks.
+
+- cuts of flow networks: One cut $(S,T)$ of flow network $G=(V,E)$, cut the $V$ as $S \ and\ \  T=V-S, s\in S,t\in T$. 
+
+  If $f$ is a flow, then the **net flow** $f(S,T)$ across the cut $(S, T)$  is defined to be
+
+  $f(S,T)=\sum_{u\in S}\sum_{v \in T} f(u,v) - \sum_{u\in S}\sum_{v \in T} f(v,u)$
+
+  The capacity of a cut $S(S,T)$ is: $c(S,T)=\sum_{u\in S}\sum_{v \in T} c(u,v)$. 
+
+- Minimum cut: A **minimum cut** of a network is a cut whose capacity is minimum over all cuts of the network.
+
+
+
+**Max-flow Min-cun Theorem**
+
 ## Algo. Examples
 
 ### counting inversions
 
-> implement: VE477  lab3.1.1
+>  of low implement: VE477  lab3.1.1
 
 数逆序对 application: voting theory / analysis of search engines ranking / collaborative filtering 
 

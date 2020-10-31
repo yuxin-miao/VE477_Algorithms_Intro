@@ -178,64 +178,54 @@ $s.d \leftarrow 0$ \\
     
 	    	
 	\end{homeworkProblem}
-    \begin{homeworkProblem}
-	\begin{enumerate}
-	\item
-	Obviously $1 \leq k \leq n$, otherwise the statement would not be true. To prove, because the hash table has $n$ slots and the probability of $n$ keys to hash to any slot is equal, for each key, it has a probability of $\frac{1}{n}$ to hash to any slot. So the number of keys hash to a same slot follows a binomial distribution with parameter $n$ and $p$, where $p=\frac{1}{n}$. Then the probability for exactly k keys hash to a same plot is $$P_k = \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \binom n k.$$
-	\item The probability of a slot to have $k$ keys is $P_k$. More than one slots may have k keys, but no slots would have more than k keys. Then, $P_k' = $the probability of at least one slot has $k$ keys and other slots have no more than $k$ keys, which is \textbf{smaller or equal} to the probability that at least one slot has $k$ keys. Because we have $n$ slots, the probability of only one slot has $k$ keys is $\binom n 1 P_k = nP_k,$ and this probability is \textbf{larger or equal} to the probability that at least one slot has $k$ keys. Through this two inequality, $P_k' \leq nP_k$.
-	\item We have Stirling formula $n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n,$ and $1 \leq k\leq n$
-		\begin{equation*}
-	\begin{aligned}
-	P_k &= \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \frac{n!}{k!(n-k)!} \\
-	&\approx \frac{\sqrt{2 \pi n}\left(\frac{n}{e}\right)^n}{\sqrt{2 \pi (n-k)}\left(\frac{n-k}{e}\right)^{n-k}k!} \left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k} \\
-	&=\sqrt{ \frac{n}{n-k}} \left(\frac{n}{n-k} \frac{n-1}{n}\right)^n \left(\frac{n-k}{e} \frac{1}{n}\frac{n}{n-1}\right)^{k} \frac{1}{\sqrt{2 \pi k}\left(\frac{k}{e}\right)^k} \\
-	& < \sqrt{ \frac{n}{2 \pi k(n-k)}}   \frac{e^{-k}}{\left(\frac{k}{e}\right)^k} \\
-	&< \frac{e^k}{k^k}
-	\end{aligned}
-	\end{equation*}
 	
+   \begin{homeworkProblem}	
+   	    	
+	\end{homeworkProblem}
 	
-	
-	\end{enumerate}
-    	
-    \end{homeworkProblem}
-    
-    
-    % Q2
-    \begin{homeworkProblem}
+	%Q5
+		
+   \begin{homeworkProblem}	
+   	    	Denote the position of $k$ internet hostspots as $loc_p = {loc_1, loc_2, ...,loc_k}$ and the position of $n$ clients as $pos_c = {pos_1, pos_2, ..., pos_n}$. 
 
-Suppose $G$ is an undirected graph $G$ with weighted edges and the weight of an edge $e$ is decreased where $e \notin T$, $e=(u,v)$.
+Construct a graph with all the clients and hostspots as vertices, all the clients could be viewed as a sink nodes while hostspots as source nodes. If one of clients ($t_i$) could connect to one of the hostpots ($s_j$) (whether user in the range parameter $r$), add an edge with capacity $c(s_j,t_i)=1$
 
- 
-     \begin{algorithm}[H]
-\Input{this file}
-\Output{nice algorithms in the homework} \BlankLine
-\Fn{\algohw{this file}}{
-download file\;
-open file\;
-compile file\;
-\While{not at end of this document}{
-read\; \uIf{understand}{
-go to next line\;
-current line becomes this one\; }
-\uElseIf{want to know more on algorithms in \LaTeX} {refer to \href{http://tug.ctan.org/tex-archive/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf} {algorithm2e documentation}}
-\Else {restart reading from the beginning\;} }
-\For{exercise $\leftarrow$ 1 \KwTo 7}{ \If{algorithm is requested} {
-solve the problem\;
-A[$exercise$] $\leftarrow $ write the algorithm in \LaTeX\; }
+Then we add a $supersource(s)$ such that add edge with capacity is the load of this hostspot such that $c(s,s_j)=l_j,\ \forall 1\leq j \leq k$. Add a $supersink(t)$ such that add edge with capacity 1 such that $c(t_i, t)=1,\ \forall 1 \leq i \leq n$. 
+
+Then apply the \textbf{Edmonds-Karp} algorithm to this graph, with source node $s$ and sink node $t$. The maximum flow ($n$) happens only when all the users connects to the network. Because the supersource node connect each hostpot with $capacity==load $ and ssuperink node connect each client with capacity $1$. 
+
+	     \begin{algorithm}[H]
+\Input{r, l, $loc_p$ (location of k hostspots), $pos_c$ (position of n clients)}
+\Output{whether all user could connect to the network} \BlankLine
+
+\tcc{initialize the graph}
+Empty graph $G\leftarrow (V,E)$ \\
+\For{$i \leftarrow 1$ \KwTo n} {
+\For {$j \leftarrow 1$ \KwTo k} {
+$dis\leftarrow (loc_j.x-pos_i.x)^2 + (loc_j.y-pos_i.y)^2$ \\
+	\If{$\sqrt{dis} < r_j$} {
+		Add edge ($s_j,t_i$) with capacity 1 to $E$\\	
+	}
+	Add vertex $s_j, t_i$ into $V$\\
 }
-\KwRet{A} }
-\caption{Algorithms in the homework} \end{algorithm}
-    
-    \end{homeworkProblem}
-    
-    %Q3
-    \begin{homeworkProblem}
-    
-    
-    \end{homeworkProblem}
-    
+}
+\For {$j \leftarrow 1$ \KwTo k} {
+add edge ($(s, s_j)$) with capacity $l_j$ \\
+}
 
+\For {$i \leftarrow 1$ \KwTo n} {
+add edge ($(t_i, t)$) with capacity $1$ \\
+}
+$f\leftarrow Edmonds-Karp(G)$\\
+\KwRet{f==n} \\
+\caption{Wifi network} \end{algorithm}
+    
+There are $k+n+2$ vertices in the graph as we add all the hostspots, clients and one supersource, supersink. The maximum edge will be that all the clients could connect to all the hostpots, which is $kn$. Then the total number of edges are $kn+k+n$. 
+
+The three for loops took $\mathcal{O}(kn)+\mathcal{O}(k)+\mathcal{O}(n)$. Time complexity for Edmonds-Karp(G) will be same as discussed in lecture $\mathcal{O}(|V||E|^2)=\mathcal{O}((k+n+2)(kn+k+n)^2)$
+
+Total time complexity:     $\mathcal{O}(kn)+\mathcal{O}(k)+\mathcal{O}(n)+\mathcal{O}((k+n+2)(kn+k+n)^2)=\mathcal{O}((k+n+2)(kn+k+n)^2)$
+	\end{homeworkProblem}
 
 
 
