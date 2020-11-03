@@ -1,0 +1,145 @@
+
+% Preamble
+\documentclass{assignment}
+
+% Packages
+\usepackage{minted}
+\usepackage{dsfont}
+\usepackage{colortbl}
+\usepackage[linesnumbered,ruled,longend]{algorithm2e} \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+
+\SetKwInOut{Input}{Input} \SetKwInOut{Output}{Output} \SetKwProg{Fn}{Function}{\string:}{end} \SetKwFunction{algohw}{AlgoHw}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+    \newpage
+
+	% Q1
+	    \begin{homeworkProblem}
+	    \begin{enumerate}
+	    \item Denote that $L = {l_1,l_2,...,l_n}$ and $R = {r_1,r_2,...,r_n}$, $i, j \leq n$.  As the matrix $A$ is defined as 
+	    $$a_{i,j}=
+\begin{cases}
+X_{i,j}, & (l_i,r_j)\in E,\\
+0, & (l_i,r_j)\notin E
+\end{cases}$$
+and the expression of determinant is 
+$$Det(A)=\sum_{\pi \in S_n} (-1)^{sgn(\pi)} \Pi_{i=1}^n a_{i,\pi (i)},$$
+where $S_n$ is the set of all permutations on $[n]$ and $sgn(\pi)$ is the sign of the permutation $\pi$. 
+
+There is a one to one correspondence between a permutation $\pi \in S$ and a possibly exists perfect matching $\{ (l_1,r_{\pi(1)}),  (l_2,r_{\pi(2)}),..., (l_n,r_{\pi(n)})  \}$. As for not perfect matching case , $\Pi_{i=1}^n a_{i,\pi (i)}$ will be zero. Then we could denote the set of perfect matchings in $G$ as $P$, and the determinant could be rewritten as 
+$$Det(A)=\sum_{\pi \in P} (-1)^{sgn(\pi)} \Pi_{i=1}^n X_{i,\pi (i)}$$
+
+
+\textbf{If $G$ has no perfect matching}, then the set $P=\emptyset$. Therefore, the determinant is identically zero.
+
+\textbf{If the determinant is identically zero}, this only happens when the summation of all the term is zero, which is same as $P=\emptyset$ and no perfect matching exist.
+
+So $Det(A)$ is identically zero if and only if $G$ as no perfect matching. 
+
+\item Then to detect whether a perfect matching exist is same as if a multivariate polynomial of degree at most $n$ is equivalent to 0. At most $n!$ terms will be in the $Det(A)$. 
+
+Assign random weight for each edge $\in E$ such that$w_{ij} \in \{ 1,2,...,2m \}$, where $m=|E|$, by the isolating lemma, the minimum weight perfect matching in $G$ will be unique with probability at least $1/2$. Set each $X_{i,j}=2^{w_{ij}}$. Let $A_{ij}$ be the matrix obtained from $A$ by removing the $i^{th}$ row and $j^{th}$ column. 
+
+Suppose there is a perfect matching $P$ has a unique minimum weight $W$. Then with two lemma
+\begin{enumerate}
+\item[•] $Det(A) \neq 0$ ans the highest power of 2 that divides $Det(A)$ is $2^W$.
+\item[•] Edge $(i,j)$ belongs to $P$ if and only if $Det(A_{ij} / 2^{W-w_{ij}})$ is odd. 
+\end{enumerate}
+
+\begin{algorithm}[H]
+\Input{graph $G=(V,E)$, $V=L\cup R, L\cap R = \emptyset$}
+\Output{whether exists a perfect matching} \BlankLine
+Choose $n^2$ integers from $w_{ij} \in \{ 1,2,...,2m \}$ randomly  \\
+Compute $Det(A)$ by Gaussian elimination \\
+Compute $adj(A)$ and recover each $Det(B_{ij})$ \\
+\For{each edge $\in E$} {
+	\If{$Det(A_{ij})/2^{W-w_{ij}}$ is odd} {
+		add the edge to $M$ \\		
+		}
+}
+\caption{randomized algorithm to find a perfect matching} \end{algorithm}
+
+\item Time complexity $\mathcal{O}(nlogn)$. If we run the algorithm for $k$ times and output $no perfect matching$ if and only if all says no, then the error probability is $2^{-k}$. 
+\item \textit{The deterministic polynomial time algorithm} is to reduce this problem to the max-flow problem as discussed in the lecture. It is not useful for parallel algorithms. 
+
+Then this algorithm still viewed as useful, as the error probability could be reduced to a rather low level. 
+
+
+	    \end{enumerate}
+	    $Reference: web.stanford.edu/class/msande319/MatchingSpring19/lecture01.pdf$
+	    \end{homeworkProblem}
+	    
+	    
+	% Q2
+	        \begin{homeworkProblem}
+The basic idea is to hold two pointers, one $fast$ and one $slow$. 
+\begin{enumerate}
+\item    Find the middle one, when even number $n$ of nodes, will return ($n/2+1$)-th node (assume the first one as index 1).
+
+
+\begin{algorithm}[H]
+\Input{the $head$ of a singly linked list}
+\Output{the middle node of the list} \BlankLine
+$slow \leftarrow head$ \\
+$fast \leftarrow head$ \\
+\While{$fast$ is not None}{
+$fast\leftarrow fast.next$ \\
+\If {$fast$ is None} {
+\KwRet{$slow$}
+}
+$fast\leftarrow fast.next$ \\
+$slow \leftarrow slow.next$ \\
+}
+\KwRet{$slow$} 
+\caption{Find the middle node} \end{algorithm}
+\item Detect whether a list contains a cycle.
+
+
+\begin{algorithm}[H]
+\Input{the $head$ of a singly linked list}
+\Output{whether exists a cycle} \BlankLine
+$slow \leftarrow head$ \\
+$fast \leftarrow head$ \\
+\While{$fast$ and $slow$ not None}{
+\If {$fast.next$ is None} {
+\KwRet{False}
+}
+$fast\leftarrow fast.next.next$ \\
+$slow \leftarrow slow.next$ \\
+\If{$fast==slow$} {\KwRet{True}}
+}
+\KwRet{False} 
+\caption{Detect cycle} \end{algorithm}
+With the linked list of $n$ nodes, the time complexity is $\mathcal{O}(n)$.
+
+\end{enumerate}
+	      
+	      
+	        \end{homeworkProblem}
+	        
+	        % Q3
+	            \begin{homeworkProblem}
+	            \begin{enumerate}
+
+	            \item At least $n$ boxes, for each time obtain a coupon not appeared before. 
+	            \item From the definition of $X$ and $X_j$, $X = X_1 + ... + X_j + ... + X_n$. The probability of collecting coupon $j$ given that already obtain $j-1$ coupon  is $P_j =\displaystyle \frac{n-(j-1)}{n}$. Therefore, $X_j$ is a geometric distribution with expectation $$E[X_j] =\frac{1}{P_j} = \frac{n}{n-j+1} $$
+	            \item To prove $E[X]=\Theta (nlogn)$
+	            \begin{align*}
+E[X] &= E[X_1] + E[X_1] +... + E[X_j] + ... + E[X_n] \\
+&= 	\frac{n}{n} + \frac{n}{n-1} +  ...+\frac{n}{n-j+1}+...+\frac{n}{1} \\ 
+&= n\sum_{i=1}^n \frac{1}{i} \approx n \int_1^n \frac{1}{x} dx \\
+&= nlogn
+	            \end{align*}
+	            \item Find that for any $1\leq i < j \leq n$, $E[X_j] > E[X_i]$. So more coupons have already get, more coupons need to buy for collecting a new kind of coupon. 
+	            \end{enumerate}
+	            	        \end{homeworkProblem}
+
+
+
+
+\end{document}
