@@ -1,27 +1,10 @@
-from collections import defaultdict
+<p align=right>于欣淼 YU Xinmiao 518021910792</p>
 
+# VE477 lab6
 
-class Graph:
+### Q1
 
-    def __init__(self):
-        # self.graph = graph  # residual graph
-        self.graph = {}
-        self.v_num = 0
-        self.v_list = []
-
-    def add_edge(self, u, v, w):
-        if u not in self.v_list:
-            self.graph[u] = {}
-            self.v_num = self.v_num + 1
-            self.v_list.append(u)
-        if v not in self.v_list:
-            self.graph[v] = {}
-            self.v_num = self.v_num + 1
-            self.v_list.append(v)
-
-        self.graph[u][v] = w
-
-
+```python
 def BFS(Bgraph, s, t, parent):
     vis = {}
     for num in range(Bgraph.v_num):
@@ -40,8 +23,11 @@ def BFS(Bgraph, s, t, parent):
                 parent[key] = u
 
     return True if vis[t] else False
+```
 
+### Q2
 
+```python
 # Returns tne maximum flow from s to t in the given graph
 def EdmondsKarp(Bgraph, source, sink):
     parent = {}
@@ -68,16 +54,45 @@ def EdmondsKarp(Bgraph, source, sink):
             v = parent[v]
 
     return max_flow
+```
+
+### Q3
+
+The graph used to demonstrate is the same as discussed in class. 
+
+<img src="/Users/yuxinmiao/CLionProjects/VE477/lab/lab6/image-20201105183456678.png" alt="image-20201105183456678" style="zoom:30%;" />
+
+```python
+from EdmondsKarp import EdmondsKarp, Graph
 
 
-if __name__ == '__main__':
-    edge_num = int(input())
-    g = Graph()
-    for i in range(edge_num):
-        nodeA, nodeB, weight = input().split()
-        g.add_edge(nodeA, nodeB, int(weight))
+def Bipartite(graph, left, right):
 
-    source = input()
-    sink = input()
+    for l_v in left:
+        graph.add_edge('s', l_v, 1)
+    for r_v in right:
+        graph.add_edge(r_v, 't', 1)
+    return EdmondsKarp(graph, 's', 't')
 
-    print(EdmondsKarp(g, source, sink))
+
+# demonstrate the same graph in slides
+left_ver = range(1, 6)
+right_ver = range(6, 10)
+g = Graph()
+g.add_edge(1, 6, 4)
+g.add_edge(2, 6, 4)
+g.add_edge(2, 8, 3)
+g.add_edge(3, 7, 2)
+g.add_edge(3, 8, 7)
+g.add_edge(3, 9, 10)
+g.add_edge(4, 8, 1)
+g.add_edge(5, 8, 2)
+g.add_edge(5, 9, 3)
+
+print(Bipartite(g, left_ver, right_ver))
+```
+
+gives the answer 4 as expected.
+
+<img src="/Users/yuxinmiao/CLionProjects/VE477/lab/lab6/image-20201105183640073.png" alt="image-20201105183640073" style="zoom:50%;" />
+
