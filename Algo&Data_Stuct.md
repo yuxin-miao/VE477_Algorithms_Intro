@@ -571,7 +571,7 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
 **Complexity**
 
-- Lemma <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102643009.png" alt="image-20200927102643009" style="zoom:33%;" />
+- Lemma <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102643009.png" alt="image-20200927102643009" style="zoom:50%;" />
 
 - *iterated logarithm* function <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927103159560.png" alt="image-20200927103159560" style="zoom:33%;" />
 
@@ -581,7 +581,7 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 
   because for each `find`, the path will be compressed, 
 
-- The omortized time for a sequence of $m$ `GenSet` `Union` `Find` operations, $n$ of which are `GenSet` can be performed in time $\mathcal{O}(m\alpha(n))$. 
+- The amortized time for a sequence of $m$ `GenSet` `Union` `Find` operations, $n$ of which are `GenSet` can be performed in time $\mathcal{O}(m\alpha(n))$. 
 
 The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
@@ -763,6 +763,39 @@ Time complexity $\mathcal{O}(n^2)$
 backtracking: 
 
 ![image-20201017141331951](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201017141331951.png) 
+
+## Data Structure 
+
+A bit comparison of different data structure. 
+
+Array has better memory locality and cache performance, *arrays are contiguous memory blocks, so large chunks of them will be loaded into the cache upon first access.*
+
+
+
+|                    | Dictionary              |      |      |      |      |      |      |      |      |
+| ------------------ | ----------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+|                    | Array (Unsorted/Sorted) |      |      |      |      |      |      |      |      |
+| `search(D,k)`      |                         |      |      |      |      |      |      |      |      |
+| `insert(D,k)`      |                         |      |      |      |      |      |      |      |      |
+| `delete(D,k)`      |                         |      |      |      |      |      |      |      |      |
+| `predecessor(D,k)` |                         |      |      |      |      |      |      |      |      |
+| `successor(D,k)`   |                         |      |      |      |      |      |      |      |      |
+| `minimum(D)`       |                         |      |      |      |      |      |      |      |      |
+| `maximum(D)`       |                         |      |      |      |      |      |      |      |      |
+
+**Dictionary using array**
+
+<img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201109091428834.png" alt="image-20201109091428834" style="zoom:50%;" />
+
+
+
+**Dictionary using linked structure**
+
+
+
+
+
+
 
 ## Hashing
 
@@ -955,47 +988,47 @@ For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalance
 * 搜搜过程中更新range
 * 本操作修改后可用于检验BST
 
-## K-d Tree
+### K-d Tree
 
-### 定义
+ **定义**
 
 * 每一层有不同的discriminator
 * $O(\log⁡ n)$ insert and search 时间
 * 左节点在**当前维度**上key小于根节点，右节点同理
 * 不同维度循环使用
 
-### 操作
+ **操作**
 
-#### Insertion
+` Insertion`
 
 * 维度循环，直到NULL插入
 
-#### Search
+`Search`
 
 * 纬度循环，直到key完全相同
 
-#### Remove
+ `Remove`
 
 * 找到右树中**当前维度**最小的值（如果没有就找左树最大值），用其替换需要删除的node
 * 递归删除用于替换的最大值/最小值节点，递归删除那个节点
 * 直到删除一个leaf为止
 
-#### FindMin
+` FindMin`
 
 * 先找左树最小值
 * 如果当前维度和要找的维度不同，则再找一下右树最小值
 * 返回左树最小值，root，右树最小值中最小的
 
-#### RangeSearch
+` RangeSearch`
 
 * Key **searchRange**[], Key **treeRange**[] 两个数组，存放2*dim个元素，描述每个维度的range
 * 若和左树在当前维度有重合，则search左树，更新range
 * 若root在range中，则加入
 * 若和右树在当前维度有重合，则search右树，更新range
 
-## AVL Tree
+### AVL Tree
 
-### 定义
+**定义**
 
 * search, insertion, removal平均复杂度$O(\log n)$，且不会退化
 * AVL Balanced: 
@@ -1003,9 +1036,9 @@ For balanced tree: $h = logn$ ; so need to rebalance the tree if it is unbalance
   * 一棵非空树，若其左/右子树均AVL Balanced，且左右子树高度差至多为1
 * Balance Factor:  $B_T=h_l-h_r \leq 1$
 
-### 操作
+ **操作**
 
-#### 平衡修复
+`平衡修复`
 
 * fix **the first unbalanced** **node** in the access path **from the leaf**.
 
