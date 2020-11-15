@@ -50,13 +50,18 @@
 
 2. a) **no index**: average and worse case should both be $n$
 
-   b) **one index**: average $\displaystyle \frac{n(n+1)}{2}$, worse $n$
+   b) **one index**: average $\displaystyle \frac{(n+1)}{2}$, worse $n$
 
-   c) **more than one index (assume m)**: average $\displaystyle \frac{n+1}{m+1}$, worse $n-m+1$ 
+   Average case: examine the expected running time, assume all permutation are equally like to happen, then the probability that $k$ occur on each index is the same as $1/n$. 
 
-   $X_i$ denotes the $i-th$  element is the match, then $Pr[X_i]=\frac{1}{m}$
+   $E = 1\cdot \frac{1}{n}+1\cdot \frac{2}{n}+…+1\cdot \frac{n}{n}=\frac{(n+1)}{2}$ 
 
+   c) **more than one index (assume m)**: average $\displaystyle \frac{n}{m}$, worse $n-m+1$ 
 
+   Assume all the permutations occur equally likely. Let $i$ be the number of index picked to find the key. $Pr[i=1]=\frac{m}{n}, Pr[i=2]=\frac{n-m}{n}\cdot \frac{m}{n-1}…Pr[i]<\frac{m}{n}\cdot (\frac{n-m}{n-1})^{i-1}$.  
+   $$
+   E[X] = \sum_{i=1}^{n-m+1}i\cdot Pr[i] < \frac{n}{m}
+   $$
 
 
 
@@ -71,3 +76,14 @@
    ```
 
 2. same as Linear Search 
+
+### Q4
+
+`ScrambleSearch` is the best. 
+
+Based on the analysis, as `LinearSearch` and `ScrambleSearch` have the same time but `LinearSearch` need the equally likely assumption.
+
+### Q5
+
+1. `LinearSearch` is the best in practice. 
+2. Practice give different answer to the theoretical answer, because in reality, the random permutation time is much longer.
