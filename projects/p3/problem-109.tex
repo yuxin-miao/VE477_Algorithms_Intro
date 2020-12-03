@@ -1,0 +1,144 @@
+\documentclass[catalog.tex]{subfiles}
+
+% do not write anything in the preamble
+
+\begin{document}
+
+\def\pbname{Spectral Clustering} %change this, do not use any number, just the name
+
+\section{\pbname} 
+
+% only for overview, so short description (no more than 1-2 lines)
+\begin{overview}
+\item [Algorithm:] Unnormalized Spectral Clustering~(algo.~\ref{alg:\currfilebase_a}), Normalized Spectral Clustering~(algo.~\ref{alg:\currfilebase_b})
+	% -	must match the label of the algorithm 
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+\item [Input:] Similarity matrix $\mathcal{S} \in \mathbb{R}^{n\times n}$, number $k$ of clusters to construct 
+\item [Complexity:] $\mathcal{O}(n^3)$
+\item [Data structure compatibility:] N/A
+\item [Common applications:] machine learning, exploratory data analysis, computer vision and speech processing.
+\end{overview}
+
+
+\begin{problem}{\pbname}
+Spectral Clustering is an algorithm based on graph and matrix theories. The given data, treated as graph, is partitioned into $k$ clusters.  
+\end{problem}
+
+
+\subsection*{Description}
+
+The similarity of this algorithm to the traditional spectral algorithm and clustering, such as K-means, could be recognized from the name. Spectral determines it will rely on principle components of an input matrix and cluster means it will rely on the data's clustering to make decision. It is originated from graph algorithm. Basically, it considered all the data as points in the space, and all the points could be connected through lines. The point with longer line connected will have lower weight. Then do the cut for the graph, to let the sum of weight in one subgraph  as large as possible and let the sum of weight among different subgraphs as small as possible. 
+
+So the method used to construct the similarity graph, cut the graph and do the cluster need to be further specified. Some common approaches are listed.
+
+\textbf{Similarity Graph Construction} \cite{ts}
+
+There are several popular methods used to transform the data points $x_1, \dots ,x_n$ into a graph. 
+\begin{itemize}
+\item $\epsilon$-neighborhood graph, usually considered as an unweighted graph. With a threshold $\epsilon$, the distance measured by $s_{ij}$ between $x_i$ and $x_j$, such that $s_{ij} = ||x_i-x_j||_2^2$. Then each element in $W$ matrix is defined as $0$ when $s_{ij}\geq \epsilon$, otherwise defined as $\epsilon$. So many of the information lost in this procedure as only two values are presented. 
+\item $k$-nearest neighbor graphs. It will traverse all the sample points and use $KNN$ algorithm to get the nearest $k$ points of each data as neighbors. Only these neighbors have $w_{ij}>0$.
+\item fully connected graph, because all the weight will be larger than 0. One common used function is Gaussian similarity function, which gives the same similarity graph and weighted graph
+$$w_{ij}=s_{ij}=exp(-\frac{||x_i-x_j||_2^2}{2\sigma^2})$$
+\end{itemize}
+
+\textbf{Cut Method}
+
+Min-cut might not give the optimal solution because the weights within one subgraph is not considered. So RatioCut\cite{slides} is introduced, which do not consider minimize $cut(A_1,A_2,...A_k)$, but also maximize the number of points in each subgraph such that $$RatioCut(A_1,A_2,...A_k) = \frac{1}{2}\sum\limits_{i=1}^{k}\frac{W(A_i, \overline{A}_i)}{|A_i|}$$.  Laplacian Matrix property is used to solve the equation and the dimension is reduced to finally obtain the result. So a bit information is lost and normally clustering on each line will be used. 
+
+Another cut method is Ncut, which will not count the number of points in one subgraph but the $vol(A_i)$
+$$NCut(A_1,A_2,...A_k) = \frac{1}{2}\sum\limits_{i=1}^{k}\frac{W(A_i, \overline{A}_i)}{vol(A_i)}$$
+
+
+\textbf{Cluster}
+
+The most common final cluster method is $K-$means cluster\cite{stslides}, which has $k$ centroids that it uses to define clusters. The points are divided into one cluster once the distance it is to this cluster's centroid is smaller than any other centroids.  
+
+
+\textbf{Algorithm}
+
+The most common common spectral clustering algorithm is introduced for unnormalized \cite{tut};
+
+
+\begin{Algorithm}[Unnormalized Spectral Clustering\label{alg:\currfilebase_a}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{Similarity matrix $\mathcal{S} \in \mathbb{R}^{n\times n}$, number $k$ of clusters to construct 
+	}
+	\Output{Cluster $A_1, \dots , A_k$ with $A_i=\{j| y_j \in C_i \} $}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	Construct a similarity graph by one of the ways described above. Let $\mathcal{W}$ be its weighted adjacency matrix \\
+	Compute the unnormalized Laplacian $\mathcal{L}$ \\
+	Compute the first $k$ eigenvectors $u_1,\dots, u_k$ of $\mathcal{L}$ \\
+	Let $\mathcal{U} \in \mathbb{R}^{n\times k}$ be the matrix containing the vectors $u_1, \dots, u_k$ as columns \\
+	For $i=1, \dots, n$, let $y_i \in \mathbb{R}^{k}$ be the vector corresponding to the $i-$th row of $\mathcal{U}$ \\
+	Cluster the points $(y_i)_{i=1,\dots ,n}$ in $\mathbb{R}^{k}$ with the $k-$means algorithm into clusters $C_1,\dots,C_k$
+	
+
+	\Ret{Cluster $A_1, \dots , A_k$ with $A_i=\{j| y_j \in C_i \} $}
+
+\end{Algorithm}
+
+As the most popular methods used for similarity matrix construction, cut and clustering are fully constructed graph based on the Gaussian function, Ncut and $K-$means, the algorithm is introduced \cite{tut}
+
+
+\begin{Algorithm}[Normalized Spectral Clustering\label{alg:\currfilebase_b}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{Similarity matrix $\mathcal{S} \in \mathbb{R}^{n\times n}$, number $k$ of clusters to construct 
+	}
+	\Output{Cluster $A_1, \dots , A_k$ with $A_i=\{j| y_j \in C_i \} $}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	Construct a similarity graph. Let $\mathcal{W}$ be its weighted adjacency matrix \\
+	Compute the unnormalized Laplacian $\mathcal{L}$ \\
+	Compute the first $k$ eigenvectors $u_1,\dots, u_k$ of the generalized eigenproblem $\mathcal{Lu}=\lambda Du$ \\
+	Let $\mathcal{U} \in \mathbb{R}^{n\times k}$ be the matrix containing the vectors $u_1, \dots, u_k$ as columns \\
+	For $i=1, \dots, n$, let $y_i \in \mathbb{R}^{k}$ be the vector corresponding to the $i-$th row of $\mathcal{U}$ \\
+	Cluster the points $(y_i)_{i=1,\dots ,n}$ in $\mathbb{R}^{k}$ with the $k-$means algorithm into clusters $C_1,\dots,C_k$
+	
+	\Ret{Cluster $A_1, \dots , A_k$ with $A_i=\{j| y_j \in C_i \} $}
+
+\end{Algorithm}
+
+
+% add comment in the pseudocode: \cmt{comment}
+% define a function name: \SetKwFunction{shortname}{Name of the function}
+% use the defined function: \shortname{$variables$}
+% use the keyword ``function'': \Fn{function name}, e.g. \Fn{\shortname{$var$}}
+\begin{Algorithm}[Name\label{alg:\currfilebase}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+	\Input{}
+	\Output{}
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+
+	\Ret
+
+\end{Algorithm}
+
+\textbf{Time Complexity}\cite{time}
+
+Most expensive step is computing the eigenvalues/eigenvectors for Laplacian matrix, which is $\mathcal{O}(n^3)$. $n$ is the number of input points. To construct the similarity matrix costs $\mathcal{O}(n^2)$. And the final $K-$means will cost $\mathcal{O}(nldk)$, where $l$ is the number of $k-$means iteration, $d$ is the dimensionality and $k$ is the final number of clusters. 
+
+So the total time complexity is $\mathcal{O}(n^3)$
+
+In conclusion, Spectral Clustering is suitable for sparse data as it only needs the similarity matrix, which is difficult for $K-$means. However, different similarity matrix might give different result. 
+
+% include references where to find information on the given problem using latex bibliography
+% insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
+% prefer books, research articles, or internet sources that are likely to remain available over time
+% as much as possible offer several options, including at least one which provide a detailed study of the problem
+% if available include links to programs/code solving the problem
+% wikipedia is NOT acceptable as a unique reference
+\singlespacing
+\printbibliography[title={References.},resetnumbers=true,heading=subbibliography]
+
+\end{document}

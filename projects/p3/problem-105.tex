@@ -1,0 +1,144 @@
+%
+% do not add anything in this part
+%
+\documentclass[catalog.tex]{subfiles}
+
+% bib file: write the bibliography in a file having the same name as the latex file
+% change the suffix".tex" by ".bib" 
+% biblatex is required, do not use bibtex!
+% DO NOT TOUCH THE FOLLOWING LINE
+
+\begin{document}
+
+%
+% things can be added below
+%
+
+\def\pbname{Guided Policy Search} %change this, do not use any number, just the name
+
+\section{\pbname} 
+
+% only for overview, so short description (no more than 1-2 lines)
+\begin{overview}
+\item [Algorithm:] Guided Policy Search~(algo.~\ref{alg:\currfilebase}) 
+	% -	must match the label of the algorithm 
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+\item [Input:] Environment and Immediate Cost (Reward) function: $c(x_t, u_t)$
+\item [Complexity:] Subject to different cases 
+\item [Data structure compatibility:] N/A
+\item [Common applications:] Do trajectory optimizaiton in dynamic systems, such as simulated robots in the swimming, hopping and walking tasks\cite{paper1}.
+\end{overview}
+
+
+\begin{problem}{\pbname}
+Given the environment and immediate cost (reward) function, GPS do the interaction between controller and environment. The algorithm will gain a final policy that could ``know" the optimal control through additional parameter added.
+\end{problem}
+
+
+\subsection*{Description}
+As a popular algorithm in reinforcement learning, Guided Policy Search (GPS) has some special properties compared to other algorithms. It build model, or dynamics to the environment, so it could not only record, but also calculate. A better sample efficiency could be obtained compared to Model-Free algorithm. GPS will final give a parametric policy, such as neural network, so no online optimization needed when testing. 
+
+
+\textbf{Problem Formulation}
+
+To formulate the problem, introduce the following formulation\cite{blog}
+
+\begin{itemize}
+\item setting: fixed time length task
+\item assumption: deterministic dynamics: $x_t=f(x_{t-1},u_{t-1})$
+\item input: environment and immediate cost (reward) function: $c(x_t, u_t)$
+\item output: parametric policy
+\end{itemize}
+
+With the above settings, the output parametric policy will be specified as deterministic case in this project with frame work such that: Collect Data, Fit Dynamics, Optimization and Next Iteration. 
+
+
+\textbf{Deterministic Policy Case}
+\begin{enumerate}
+\item Collect data: Use controller to interactive with environment and get the trajectory dataset $D$
+$\mathcal{D} = { \tau_i }$, where the trajectory is represented through $\tau_i = { x_{1i}, u_{1i}, \dots , x_{1T}, u_{1T} }$.
+\item Fit Dynamics. Use the dataset $D$ to fit one linear model that would use different model for different input from different time, such that $x_{t+1} = f(x_t, u_t) = A_tx_t + B_tu_t + c_t$. The model is obtained through the $\tau_i$ data ${ (x_{t1}, u_{t1}, x_{t+1,1}), \dots , (x_{ti}, u_{ti}, x_{t+1,i}) }$ from one specific time  $t$ using linear regression. 
+\item  Optimization. 
+
+\textbf{Controller}
+As our goal is to minimize the cost while satisfying the dynamics constraint, the problem could be summarized as the equation 
+
+\begin{align*}
+\mathop{\text{min }}_{x_1, u_1, ..., x_T, u_T} & \sum_{t=1}^T c(x_t, u_t) \\
+\text{s.t. } & x_t = f(x_{t-1}, u_{t-1}) \quad t=1, \dots, T
+\end{align*}
+
+To solve this equation, when the cost is a quadratic mode, there is one optimization method called \textit{Linear Quadratic Regulator (LQR)}. LQR could take the input:linear model($F_t, f_t$)and quadratic cost($C_t, c_t$) with the output $K_t, k_t$. Obtain the optimal control, which is the solution to the previous equation $u_t=K_tx_t+k_t$, $x_{t+1}=f(x_t, u_t)$.
+
+If the cost function is not a quadratic model, we could use iterative LQR(iLQR) to get the solution, which will use linear and quadratic expansion then apply LQR. 
+
+
+\textbf{Policy}
+Then it comes to the special part of GPS, as one policy will be obtained to ``know" how to do the optimal control. So one optimization variable $\theta$ and constraint $u_t = \pi_\theta(x_t)$ is added 
+
+\begin{align*}\mathop{\text{min }}_{x_1, u_1, \dots, x_T, u_T, \theta} &  \sum_{t=1}^T c(x_t, u_t) \\
+\text{s.t. } &u_t = \pi_\theta(x_t) \quad t=1, \dots, T\\
+&x_t = f(x_{t-1}, u_{t-1}) \quad t=1, \dots, T.
+\end{align*}
+
+The solution for the above equation using \textit{Dual Gradient Descent(DGD)}, the brief procedure is that 
+\begin{itemize}
+\item Write the corresponding Lagrangian function $\mathcal{L}(x, \lambda) = f(x) + \lambda C(x)$
+\item Find the $x$ such that minimize the function $x^* = \mathop{\text{argmin }}_x \mathcal{L}(x, \lambda)$
+\item Use $x^*$ into $\mathcal{L}(x, \lambda)$ to get the lower bound of the original question $g(\lambda) = \mathcal{L}(x^*, \lambda)$
+\item Update the lambda $\lambda = \lambda + \alpha \frac{\partial g}{\partial \lambda}$
+\item Return to step 2 to do iteration. 
+\end{itemize}
+\item Next Iteration. Return to Collect Data step, which is that the new controller will interactive to the environment again and do the iteration. 
+
+\end{enumerate}
+
+
+
+
+% add comment in the pseudocode: \cmt{comment}
+% define a function name: \SetKwFunction{shortname}{Name of the function}
+% use the defined function: \shortname{$variables$}
+% use the keyword ``function'': \Fn{function name}, e.g. \Fn{\shortname{$var$}}
+\begin{Algorithm}[Guided Policy Search\label{alg:\currfilebase} \cite{paper1}]
+	% -	must match the reference in the overview
+	% - when writing more than one algo use alg:\currfilebase_a, alg:\currfilebase_b, etc.
+	%\SetKwFunction{myfunction}{MyFunction}	
+
+	%	\Fn{\myfunction{$a,b$}}{
+	%	}
+	\BlankLine
+	Generate DDP solutions $\pi_{\varsigma_1}, \dots, \pi_{\varsigma_{n}}$ \\
+	Sample $\zeta_q, \dots ,\zeta_{m}$ from $q(\zeta)=\frac{1}{n}\sum_{i}\pi \varsigma_i(\zeta)$ \\
+	Initialize $\theta^* \leftarrow \text{arg max}_{\theta}\sum_i \pi \varsigma_i (\zeta)$ \\
+	Build initial sample set $S$ from $\pi_{\varsigma_1}, \dots, \pi_{\varsigma_{n}}, \pi_{\theta^*}$ \\
+	\For {iteration $k=1$ \KwTo K} {
+		Choose current sample set $\S_k \subset S$ \\
+		Optimize $\theta_k \leftarrow \text{arg msx}_{\theta} \Phi_{S_k}(\theta)$ \\
+		Append samples from $\pi_{\theta_{k}} \text{ to } S_{k}$	and $S$ \\
+		Optionally generate adaptive guiding samples \\
+		Estimate the values of $\pi_{\theta_{k}}$ and $\pi_{\theta^*}$ using $S_k$ \\
+		\If {$\pi_{\theta_{k}}$ is better than $\pi_{\theta^*}$} 		{		
+		$\theta^* \leftarrow \theta_k$ \\
+		Decrease $w_r$
+		}
+		\Else {
+		Increase $w_r$ \\
+		Optionally resample from $\pi_{\theta}$
+	}
+	}
+	\Ret {the best policy $\pi_{\theta^*}$}
+
+\end{Algorithm}
+
+
+% include references where to find information on the given problem using latex bibliography
+% insert references in the text (\cite{}) and write bibliography file in problem-nb.bib (replace nb with the problem number)
+% prefer books, research articles, or internet sources that are likely to remain available over time
+% as much as possible offer several options, including at least one which provide a detailed study of the problem
+% if available include links to programs/code solving the problem
+% wikipedia is NOT acceptable as a unique reference
+\singlespacing
+\printbibliography[title={References.},resetnumbers=true,heading=subbibliography]
+
+\end{document}
