@@ -1,0 +1,88 @@
+
+% Preamble
+\documentclass{assignment}
+
+% Packages
+\usepackage{minted}
+\usepackage{dsfont}
+\usepackage{colortbl}
+\usepackage[linesnumbered,ruled,longend]{algorithm2e} \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+
+\SetKwInOut{Input}{Input} \SetKwInOut{Output}{Output} \SetKwProg{Fn}{Function}{\string:}{end} \SetKwFunction{algohw}{AlgoHw}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+    \newpage
+
+	% Q1
+    \begin{homeworkProblem}
+ \begin{enumerate}
+\item $ P = \frac{\left( \begin{array}
+{ccc}
+t \\
+2 
+\end{array}\right)}{\left( \begin{array}
+{ccc}
+|V| \\
+2 
+\end{array}\right)} > \frac{1}{\left( \begin{array}
+{ccc}
+6 \\
+2 
+\end{array}\right)} = \frac{1}{15} $ 
+\item  Let $p_k$ be the probability of success of a problem on the $k^{th}$ level of recursion, with leaf level $0$. As we proved before 
+\begin{align*} 
+P(t) &\geq \begin{cases}
+ 1 - (1-\frac{1}{2}P(\frac{t}{\sqrt{2}}))^2, & t \geq 7 \\[2ex] 
+\frac{1}{15},& \text{otherwise}
+\end{cases} \\[3ex]
+&\text{Then from the definition of } p_k  \\
+p_0 &= \frac{1}{15} \\
+p_{k+1} &\geq 1 - (1 - \frac{1}{2}p_k)^2 = p_k - \frac{1}{4}p_k^2
+\end{align*}
+
+\item $z_k = \frac{4}{p_k} - 1$, then $p_k = \frac{4}{z_k + 1}$, substitute in 
+\begin{align*}
+p_0 &= \frac{1}{15} = \frac{4}{z_0 + 1} \\
+p_{k+1} &= p_k - \frac{1}{4}p_k^2 = \frac{4}{z_k + 1} - \frac{1}{4}(\frac{4}{z_k + 1})^2 = \frac{4}{z_{k+1} + 1} \\[2ex] 
+z_{k+1} &= \frac{4}{p_{k+1}} - 1 = \frac{4}{p_k - \frac{1}{4}p_k^2} - 1 \\ 
+&= \frac{(4-p_k)^2 + p_k^2}{(4-p_k)p_k} + 1\\[3ex]
+\text{Obtain}  \quad
+z_0 &= 59 \\
+z_{k+1} &= z_k + 1 + \frac{1}{z_k}
+\end{align*}
+\item Obtain that $z_k=\Theta(k)$ and $p_k=\frac{4}{z_k + 1} = \Theta(\frac{1}{k})$.
+
+The depth of recursion is $2\text{log}_2n + O(1)$, $k\leq 2\text{log}_2n + O(1)$, $p_{2\text{log}_2n + O(1)} = \Theta (\frac{1}{2\text{log}_2n + O(1)}) =  \Theta (\frac{1}{logn})$
+
+$$P(n) \geq p_{2\text{log}_2n + O(1)} = \Theta(\frac{1}{logn})$$
+ So $P(n) = \Omega (\frac{1}{logn})$
+\end{enumerate}    
+    
+    
+    \end{homeworkProblem}
+	
+    %Q2
+    \begin{homeworkProblem}
+    
+    \begin{enumerate}
+    \item Yes, keep a pointer that pointing to the minimum element, and special concern should be taken for removing the min element. The three operations $push(x)$, $pop()$, $returnmin()$ will be implemented as 
+    \begin{enumerate}
+    \item[•] $push(x)$: compare x with the min element (empty stack should have $min=\infty$ as default), if $x\geq min$, just put it on the top, otherwise insert $2\times x - min$ into it and let $min = x$.
+    \item[•] $pop()$: if the top element, denote as $y$, $\geq min$, just pop it, otherwise make $min=2\times min - y$  then pop it. 
+    \item[•] $returnmin()$: return the value pointing by the min pointer. 
+    \end{enumerate}
+    \item 1 second. Image if you could not tell the difference between two ants. Then ant A and ant B collide and reverse direction, but without distinguish them, you could only see the two ants continue their walking (seems like no reverse direction happens). So reverse do not influence the time. 
+    \end{enumerate}
+    
+    \end{homeworkProblem}
+    
+
+
+
+
+\end{document}
