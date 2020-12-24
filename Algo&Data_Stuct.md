@@ -33,7 +33,7 @@
 
 P问题是在多项式时间内可以被解决的问题，而NP问题是在多项式时间内可以被验证其正确性的问题。 NP困难问题是计算复杂性理论中最重要的复杂性类之一。如果所有NP问题都可以多项式时间归约到某个问题，则称该问题为NP困难。
 
-$NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/截屏2020-10-10 上午10.09.31.png" alt="截屏2020-10-10 上午10.09.31" style="zoom:50%;" />
+$NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="./images/NPP.png" alt="截屏2020-10-10 上午10.09.31" style="zoom:50%;" />
 
 - PSPACE completeness 
 
@@ -90,7 +90,7 @@ $NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="/Users/yuxinmi
      c. For clause has more than three literals as $(x_1\lor x_2\lor ... \lor x_m)$, introduce new variable $z_i$ change to $(x_1\lor x_2 \lor z_1)\land (\neg z_1\lor x_3 \lor z_2)\land (\neg z_2\lor x_4 \lor z_3)\land ... \land (\neg z_{m-3}\lor x_{m-1} \lor x_m)$
 
      *an example:*
-     ![image-20201023132044585](/Users/yuxinmiao/CLionProjects/VE477/image-20201023132044585.png)
+     <img src="./images/image-20201023132044585.png" alt="image-20201023132044585" style="zoom:50%;" />
 
      ​	Then we could rewrite it as  
 
@@ -106,7 +106,7 @@ $NP$ contains all problems in $P$ (i.e. $P\subset NP$). <img src="/Users/yuxinmi
 - $logn! \in \Theta(n \cdot logn), \lceil logn\rceil \in \Theta(logn)$
 - 
 
-![image-20200915132328058](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200915132328058.png)
+<img src="./images/image-20200915132328058.png" alt="image-20200915132328058" style="zoom:50%;" />
 
 1+2+4+8+…+2^{log n} $\approx$ 2n-1. Thus, the time complexity is $\Theta(n)$.
 
@@ -118,35 +118,35 @@ $T(n)\in O(f(n))$ also $T(n)= O(f(n))$
 
 1. RAM model 
 
-   ![image-20200924095457385](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200924095457385.png)
+   <img src="./images/image-20200924095457385.png" alt="image-20200924095457385" style="zoom:50%;" />
 
 The complexity of an algorithm is defined by a numerical function
 
 2. $\mathcal{O}$
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925120901038.png" alt="image-20200925120901038" style="zoom:50%;" />
+<img src="./images/image-20200925120901038.png" alt="image-20200925120901038" style="zoom:50%;" />
 
 A sufficient condition of Big-Oh
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130630096.png" alt="image-20200925130630096" style="zoom:33%;" />
+<img src="./images/image-20200925130630096.png" alt="image-20200925130630096" style="zoom:33%;" />
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130715821.png" alt="image-20200925130715821" style="zoom:33%;" />![image-20200925130730523](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925130730523.png)
+<img src="./images/image-20200925130715821.png" alt="image-20200925130715821" style="zoom:33%;" />![image-20200925130730523](./images//image-20200925130730523.png)
 
 
 
 > ？
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925165500558.png" alt="image-20200925165500558" style="zoom:33%;" />
+<img src="./images/image-20200925165500558.png" alt="image-20200925165500558" style="zoom:33%;" />
 
 
 
 3. $\Omega$
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925120943159.png" alt="image-20200925120943159" style="zoom:50%;" />
+<img src="./images/image-20200925120943159.png" alt="image-20200925120943159" style="zoom:50%;" />
 
 4. $\Theta$
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925121016271.png" alt="image-20200925121016271" style="zoom:50%;" />
+<img src="./images/image-20200925121016271.png" alt="image-20200925121016271" style="zoom:50%;" />
 
 
 
@@ -159,7 +159,7 @@ A sufficient condition of Big-Oh
 - b = input size shrinking factor (positive integer)
 - $O(n^d)$: the runtime of merging solutions. d is a real value $\geq $ 0
 - a, b, d : independent of n
-- ![image-20200917083956683](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200917083956683.png)
+- ![image-20200917083956683](image-20200917083956683.png)
     1. In merge sort, a=2, b=2, d=1
     2. in quick sort, if choose the median as the pivot, a=2,b=2,d=1
     3. in binary search, a=1, b=2, d=0
@@ -224,11 +224,11 @@ select a pivot **randomly**
 
 出现可能$\frac{2^{n-1}}{n!}$ - extremely samll 
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925090935239.png" alt="image-20200925090935239" style="zoom:50%;" />
+<img src="./images/image-20200925090935239.png" alt="image-20200925090935239" style="zoom:50%;" />
 
 2. On average  $\mathbb{\theta}(n)$
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925140748192.png" alt="image-20200925140748192" style="zoom:33%;" />
+<img src="./images/image-20200925140748192.png" alt="image-20200925140748192" style="zoom:33%;" />
 
 how to do partition? Not in place: with another array B
 
@@ -257,7 +257,7 @@ how to do partition? Not in place: with another array B
 3. Sum all number from $0$ to $k$ in $count$ as $count[i] = count[i] + count[i-1]$ 
 4. from the end of $A$,  put each element in $A[n]$ in the new array at the position $count[A[n]]$, then $count[A[n]] -=1 $
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918175945944.png" alt="image-20200918175945944" style="zoom:33%;" />
+<img src="./images/image-20200918175945944.png" style="zoom:33%;" />
 
 #### Bucket sort
 
@@ -268,7 +268,7 @@ how to do partition? Not in place: with another array B
 3. in each bucket, do comparison sort
 4. visit all the buckets in order and put all items back to the original array 
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918182720630.png" alt="image-20200918182720630" style="zoom:33%;" />
+<img src="./images/image-20200918182720630.png" alt="image-20200918182720630" style="zoom:33%;" />
 
 #### Radix sort
 
@@ -276,7 +276,7 @@ how to do partition? Not in place: with another array B
 
 each element in the n-element array $A$ has $d$ digits, where digit 1 is the lowest-order digit and digit $d$ is the highest order.
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200918184344405.png" alt="image-20200918184344405" style="zoom:33%;" />
+<img src="./images/image-20200918184344405.png" alt="image-20200918184344405" style="zoom:33%;" />
 
 
 
@@ -290,7 +290,7 @@ In-place merge sort need to shift all the element because no additional memory (
 
 ### Randomized selection algorithm
 
-![image-20200925084333747](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925084333747.png)
+<img src="./images/image-20200925084333747.png" alt="image-20200925084333747" style="zoom:50%;" />
 
 **Average** :
 
@@ -304,7 +304,7 @@ Input array size n && **random pivot choice**
 >
 > Good pivot: make the left sub-array size is am, i.e. 1\4<a<3\4. Probability: 0.5. 因为只要在old array中间50%的位置取即可获得
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925093853343.png" alt="20200925093853343.png" style="zoom:33%;" />
+<img src="./images/image-20200925093853343.png" alt="20200925093853343.png" style="zoom:33%;" />
 
 
 
@@ -316,7 +316,7 @@ N: the number of chosen needed to get a good pivot. P[N=k] = $\frac{1}{2^k}$;  E
 
 E[$X_j$] <= E[N] = 2
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925095103847.png" alt="image-20200925095103847" style="zoom:33%;" />
+<img src="./images/image-20200925095103847.png" alt="image-20200925095103847" style="zoom:33%;" />
 
 > 第一层循环中将pivot与n个元素进行比较，时间为$cn$.: 第一步时间 $T(n)=cn+T(n/2)$
 >
@@ -362,7 +362,7 @@ Best case happens when your random selection of pivot directly gives you the i-t
 
 **Dselect**
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925095542348.png" alt="image-20200925095542348" style="zoom:70%;" />
+<img src="./images/image-20200925095542348.png" alt="image-20200925095542348" style="zoom:70%;" />
 
 Intpu array size n; Runs on $\mathcal{O}(n)$ time 
 
@@ -371,7 +371,7 @@ but not in-place: need an additional array of 5/n medians
 - 对于长度为5的array排序，时间为constant，
 
 - why size <= 0.7n
-- <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200925102033806.png" alt="image-20200925102033806" style="zoom:33%;" />
+- <img src="./images/image-20200925102033806.png" alt="image-20200925102033806" style="zoom:33%;" />
 
 于是可以看出在图中T(?)处的size不会大于0.7n
 
@@ -567,13 +567,13 @@ A *[disjoint-set data structure](http://en.wikipedia.org/wiki/Disjoint-set_data_
 - When `Find`, update all the nodes along the path (all link them to the root directly)
 - When `Union`, set the root with higher depth as the parent of another root (minimize the depth of the tree) 
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102034381.png" alt="image-20200927102034381" style="zoom:33%;" />
+<img src="./images/image-20200927102034381.png" alt="image-20200927102034381" style="zoom:33%;" />
 
 **Complexity**
 
 - Lemma <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927102643009.png" alt="image-20200927102643009" style="zoom:50%;" />
 
-- *iterated logarithm* function <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200927103159560.png" alt="image-20200927103159560" style="zoom:33%;" />
+- *iterated logarithm* function <img src="./images/image-20200927103159560.png" alt="image-20200927103159560" style="zoom:33%;" />
 
   such that, the iterated algorithm of n is the number of time that the function log need to be applied to obtain a number smaller than  2
 
@@ -668,7 +668,7 @@ The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
 网络流问题
 
-<img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201030194352143.png" alt="image-20201030194352143" style="zoom:50%;" />
+<img src="./images/image-20201030194352143.png" alt="image-20201030194352143" style="zoom:50%;" />
 
 - 对flow的限制：容量限制和流量守恒
 - Antiparallel: $(v_1,v_2)\in E \ and \ (v_2,v_1)\in E$ 
@@ -678,7 +678,7 @@ The complexity of Union-Find structure is $\Omega(\alpha(n))$
 
 - Residual graph $G_f$. ($|E_f|\leq 2|E|$) 残存图
 
-  <img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201030200750115.png" alt="image-20201030200750115" style="zoom:50%;" />
+  <img src="./images/image-20201030200750115.png" alt="image-20201030200750115" style="zoom:50%;" />
 
 - Argumenting path 增广路径. Residual capacity: on an argumenting path $p$, the maximum flow that could be added to each edge s. 将沿着增广路径重复增加路径上的流量直到找到一个最大流. How to know we find a maximum flow? A flow is the maximum flow if and only if no argumenting path in the residual networks.
 
@@ -762,7 +762,7 @@ Time complexity $\mathcal{O}(n^2)$
 
 backtracking: 
 
-![image-20201017141331951](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201017141331951.png) 
+![image-20201017141331951](./images/image-20201017141331951.png) 
 
 ## Data Structure 
 
@@ -785,7 +785,7 @@ Array has better memory locality and cache performance, *arrays are contiguous m
 
 **Dictionary using array**
 
-<img src="/Users/yuxinmiao/CLionProjects/VE477/image-20201109091428834.png" alt="image-20201109091428834" style="zoom:50%;" />
+<img src="./images/image-20201109091428834.png" alt="image-20201109091428834" style="zoom:50%;" />
 
 
 
@@ -815,7 +815,7 @@ Collision: item with differnet search keys hashed into the same buckets (to solv
 
 **Hash Function Design Criteria:**  
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200928093101940.png" alt="image-20200928093101940" style="zoom:33%;" />
+<img src="./images/image-20200928093101940.png" alt="image-20200928093101940" style="zoom:33%;" />
 
 for non-integers: 
 
@@ -865,7 +865,7 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
 
    - Unsuccessful search: every probe but the last access an occupied slot without desired key, and the last probe access an empty slot.
 
-   -  **X**: the number of probes made in unsuccessful search. <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150127267.png" alt="image-20200930150127267" style="zoom:33%;" />
+   -  **X**: the number of probes made in unsuccessful search. <img src="./images/image-20200930150127267.png" alt="image-20200930150127267" style="zoom:33%;" />
 
      Then $E[X] = \sum_{i=1}^{\infty}Pr[X \geq i] \leq \sum_{i=1}^{\infty} \alpha^{i - 1} = \sum_{i=0}^{\infty} \alpha^{i} = \frac{1}{1-\alpha}$
 
@@ -875,7 +875,7 @@ Compression map by modulo arithemetic: *homeBucket = c(hashcode) = hashcode % n*
 
    - quadratic probing and double hashing: $U(L)= \frac{1}{1-L}$, $S(L)= \frac{1}{L}[ln\frac{1}{1-L}]$
 
-   <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930145346318.png" alt="image-20200930145346318" style="zoom: 33%;" />![image-20200930150757482](/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20200930150757482.png)
+   <img src="./images/image-20200930145346318.png" alt="image-20200930145346318" style="zoom: 33%;" />![image-20200930150757482](image-20200930150757482.png)
 
    
 
@@ -1086,7 +1086,7 @@ $$
 
 > implementation: VE477 lab4
 
-<img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201015153844874.png" alt="image-20201015153844874" style="zoom:50%;" />
+<img src="./images/image-20201015153844874.png" alt="image-20201015153844874" style="zoom:50%;" />
 
 
 
@@ -1099,7 +1099,7 @@ $$
    - All the root of trees (**root list**).
    - $H.n$: the number of node in $H$. 
 
-   <img src="/Users/yuxinmiao/Library/Application Support/typora-user-images/image-20201015155102698.png" alt="image-20201015155102698" style="zoom:50%;" />
+   <img src="./images/image-20201015155102698.png" alt="image-20201015155102698" style="zoom:50%;" />
 
 2. **Mergeable-heap operations**
 

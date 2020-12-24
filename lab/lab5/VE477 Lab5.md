@@ -26,8 +26,8 @@ Implement in `code/BellmanFord.py`.
 
   > As I fail some JOJ cases of *Dijkstra*, the time is recorded only when find the output of these two algorithm is same
 
-![截屏2020-11-01 下午6.36.55](/Users/yuxinmiao/CLionProjects/VE477/lab/lab4/截屏2020-11-01 下午6.35.17.png)
+<img src="./dense.png" alt="截屏2020-11-01 下午6.36.55" style="zoom:50%;" />
 
-![截屏2020-11-01 下午6.36.55](/Users/yuxinmiao/CLionProjects/VE477/lab/lab4/截屏2020-11-01 下午6.36.55-4227114.png)
+<img src="./sparse.png" alt="截屏2020-11-01 下午6.36.55" style="zoom:50%;" />
 
 ​		

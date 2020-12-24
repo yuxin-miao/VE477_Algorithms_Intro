@@ -60,7 +60,7 @@ def EdmondsKarp(Bgraph, source, sink):
 
 The graph used to demonstrate is the same as discussed in class. 
 
-<img src="/Users/yuxinmiao/CLionProjects/VE477/lab/lab6/image-20201105183456678.png" alt="image-20201105183456678" style="zoom:30%;" />
+<img src="./image-20201105183456678.png" alt="image-20201105183456678" style="zoom:30%;" />
 
 ```python
 from EdmondsKarp import EdmondsKarp, Graph
@@ -94,5 +94,5 @@ print(Bipartite(g, left_ver, right_ver))
 
 gives the answer 4 as expected.
 
-<img src="/Users/yuxinmiao/CLionProjects/VE477/lab/lab6/image-20201105183640073.png" alt="image-20201105183640073" style="zoom:50%;" />
+<img src="./image-20201105183640073.png" alt="image-20201105183640073" style="zoom:50%;" />
 

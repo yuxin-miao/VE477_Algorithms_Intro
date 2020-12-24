@@ -63,8 +63,6 @@
    E[X] = \sum_{i=1}^{n-m+1}i\cdot Pr[i] < \frac{n}{m}
    $$
 
-
-
 ### Q3
 
 1. `ScrambleSearch`
@@ -85,5 +83,30 @@ Based on the analysis, as `LinearSearch` and `ScrambleSearch` have the same time
 
 ### Q5
 
+<img src="./image-20201117144554965.png" alt="image-20201117144554965" style="zoom:50%;" />
+
 1. `LinearSearch` is the best in practice. 
 2. Practice give different answer to the theoretical answer, because in reality, the random permutation time is much longer.
+
+```python
+if __name__ == '__main__':
+    random.seed()
+    arr_len = 1000000
+    arr = [random.randint(0, arr_len * 10) for i in range(arr_len)]
+    random_time, linear_time, scramble_time = [], [], []
+    for i in range(1000):
+        key = random.randint(0, arr_len)
+        random_time.append(timeit.timeit("RandomSearch(arr, key)",
+                                         setup="from __main__ import RandomSearch, arr, key", number=3))
+        # print("1000 times random search time: {}".format(random_time))
+        linear_time.append(timeit.timeit("LinearSearch(arr, key)",
+                                         setup="from __main__ import LinearSearch, arr, key", number=3))
+        # print("1000 times linear search time: {}".format(linear_time))
+        scramble_time.append(timeit.timeit("ScrambleSearch(arr, key)",
+                                           setup="from __main__ import ScrambleSearch, arr, key", number=3))
+        # print("1000 times linear search time: {}".format(scramble_time))
+    print("1000 times random search time: {}".format(np.mean(random_time)))
+    print("1000 times linear search time: {}".format(np.mean(linear_time)))
+    print("1000 times linear search time: {}".format(np.mean(scramble_time)))
+```
+
