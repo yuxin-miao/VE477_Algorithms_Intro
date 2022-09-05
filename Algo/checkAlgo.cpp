@@ -17,9 +17,9 @@ void insertionSort(int arr[], int size);
 
 int main(int argc, char const *argv[])
 {
-	
-	int foo [5] = { 16, 2, 77, 40, 12071 };	
-	insertionSort(foo, 5);
+
+	// int foo [5] = { 16, 2, 77, 40, 12071 };	
+	// insertionSort(foo, 5);
 	return 0;
 }
 
