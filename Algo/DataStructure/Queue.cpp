@@ -1,19 +1,8 @@
+#include "Queue.h"
+#include <string>
 using namespace std;
-#define MAX 1000
-class QueueFullOrEmpty{};
 
-class ArrQueue {
-    int head;
-    int tail;
-    int Queue[MAX];
-public:
-    ArrQueue() { head = tail = 0; }
-    bool isFull();
-    bool isEmpty();
-    void enqueue(int val);
-    int dequeue();
-};
-
+ArrQueue::ArrQueue() { head = tail = 0; }
 bool ArrQueue::isEmpty() {
     return head == tail;
 }
@@ -27,15 +16,15 @@ int CircularAddOne(int num) {
     else return num + 1;
 }
 
-void ArrQueue::enqueue(int val) {
+void ArrQueue::enqueue(Task val) {
     if (isFull()) throw QueueFullOrEmpty();
     Queue[tail] = val;
     tail = CircularAddOne(tail);
 }
 
-int ArrQueue::dequeue() {
-    if (isEmpty) throw QueueFullOrEmpty();
-    int val = Queue[head];
+Task ArrQueue::dequeue() {
+    if (isEmpty()) throw QueueFullOrEmpty();
+    Task val = Queue[head];
     head = CircularAddOne(head);
     return val;
 }

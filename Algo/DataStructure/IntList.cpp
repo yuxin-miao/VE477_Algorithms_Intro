@@ -1,7 +1,6 @@
 #include "IntList.h"
 #include<iostream>
 
-
 bool IntList::isEmpty() const {
     return !first;
 }
