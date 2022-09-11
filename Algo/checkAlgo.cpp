@@ -14,17 +14,51 @@ struct ListNode {
 };
 void insertionSortArray(int arr[], int size);
 void insertionSort(int arr[], int size);
-
-int main(int argc, char const *argv[])
-{
-
-	// int foo [5] = { 16, 2, 77, 40, 12071 };	
-	// insertionSort(foo, 5);
-	return 0;
+void printLinkedList(ListNode* node) {
+    while (node)
+	{
+		cout << node->val << " ";
+		node = node->next;
+	}
+	
 }
+
+
 
 class Solution {
 public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) return head;
+        int valStore = head->val == head->next->val ? head->val : head->val - 1;
+        ListNode* firstNode = new ListNode(0);
+        
+        ListNode* currNode = head;
+        ListNode* prevNode = firstNode;
+        
+        while (currNode)
+        {
+            if (currNode->next!=nullptr && currNode->val == currNode->next->val) valStore = currNode->val;
+            while (currNode!=nullptr && currNode -> val == valStore) {
+                currNode = currNode ->next;
+            }
+            if (currNode == nullptr)
+            {
+                break;
+            }
+            
+            if (currNode->next && currNode->val == currNode->next->val) {
+                valStore = currNode->val;
+            } else {
+				cout << "currNode "<< currNode->val << endl;
+                prevNode->next = currNode;
+                prevNode = currNode;
+                currNode = currNode->next;
+				prevNode->next = nullptr;
+            }
+            
+        }
+        return firstNode->next;
+    }
 	void testInsertionSortList(int argc, char const *argv[]){
 		ListNode* prevNode = new ListNode((int)argv[1]);
 		ListNode* head = prevNode;
@@ -34,6 +68,48 @@ public:
 				prevNode = node;
 			}
 		
+	}
+	ListNode* partition(ListNode* head, int x) {
+        if (head == nullptr || head->next == nullptr) return head;
+        ListNode* smaller = new ListNode(0);
+        ListNode* begin = smaller;
+        ListNode* larger = new ListNode(0);
+        ListNode* secondBegin = larger;
+        ListNode* currNode = head;
+        while (currNode) {
+            if (currNode->val < x) {
+                smaller->next = currNode;
+                smaller = currNode;
+	            currNode = currNode->next;
+				smaller->next = nullptr;
+            }
+            else 
+            {
+                larger->next = currNode;
+                larger = currNode;
+    	        currNode = currNode->next;
+				larger->next = nullptr;
+	        }
+			
+        }
+        smaller->next = secondBegin->next;
+        return begin->next;
+    }
+    ListNode* deleteDuplicates1(ListNode* head) {
+        if (head==nullptr || head->next == nullptr) return head;
+        ListNode* firstNode = new ListNode(0);
+        ListNode* prevNode = firstNode;
+        ListNode* currNode = head;
+        while(currNode) {
+            while(currNode->next != nullptr && currNode->val == currNode->next->val) {
+                currNode = currNode->next;
+            }
+            prevNode->next = currNode;
+            prevNode = currNode;
+            currNode = currNode->next;
+            prevNode->next = nullptr;
+        }
+		return firstNode->next;
 	}
 	ListNode* insertionSortList(ListNode* head) {
 		ListNode* initHead = head;
@@ -67,24 +143,7 @@ public:
 		return initHead;
 	}
 };
-void checkARGVBtye(int argc, char const *argv[]) {
-		std::cout << "executable= " << argv[0] << std::endl;
 
-	for (int i=1; i<argc; i++) {
-		std::string s(argv[i]); //put char array into a string
-
-		std::cout << "arg["<<i<<"]="<<s<<std::endl;
-
-		for (int j=0; j<6; j+=2) {
-
-			std::string byteString = s.substr(j, 2);
-
-			char byte = (char) strtol(byteString.c_str(), NULL, 16);
-
-			std::cout << "byteString= "<<byteString << " as integer= "<<(int)byte<<std::endl;
-		}
-	}
-}
 void printArr(int arr[], int size) {
 	for (int i = 0; i < size; i++) {
 		cout << arr[i] << " ";
@@ -123,5 +182,24 @@ void insertionSort(int arr[], int size) {
 		arr[j+1] = num;
 	}
 		printArr(arr, size);
+
+}
+
+
+int main() {
+    ListNode* head = new ListNode(1);
+	Solution sol;
+    ListNode* prevNode = head;
+	int arr[] = {1,4,3,2,5,2};
+    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		ListNode* node = new ListNode(arr[i]);
+		prevNode->next = node;
+		prevNode = node;
+	}
+	printLinkedList(head);
+	head = sol.partition(head, 3);
+	printLinkedList(head);
+	
 
 }
