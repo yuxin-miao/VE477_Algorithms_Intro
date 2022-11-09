@@ -14,7 +14,7 @@ The images mainly comes from *VE477&281 couse slides*, *Introduction to Algorith
 
 **Lab code & report**
 
-Code written in Python unless spefied, report written in Latex 
+Code written in Python unless specified, report written in Latex 
 
 ### Lab1
 
