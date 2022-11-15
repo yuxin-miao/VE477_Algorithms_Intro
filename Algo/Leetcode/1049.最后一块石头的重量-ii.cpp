@@ -8,7 +8,7 @@
 class Solution {
 public:
     int lastStoneWeightII(vector<int>& stones) {
-        // 2' DP: similar to find two subsets that has same weight ? really???  
+        // 2' DP: similar to find two subsets that has same weight 
         int sum = accumulate(stones.begin(), stones.end(), 0);
         int halfSum = sum / 2;
         vector<int> DPTable(halfSum + 1, 0);
