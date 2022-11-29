@@ -2,6 +2,13 @@
 #include <iostream>
 #include <sstream>
 using namespace std;
+/**
+ * @brief 11.23 HW机考第二题 200pt
+ * 四种颜色，每个房子刷每种颜色会花费不同的钱
+ * 两个相邻的房子不能刷一样的颜色
+ * 最少花多少钱刷完所有房子
+ * @return int
+ */
 
 int main() {
   // INPUT
