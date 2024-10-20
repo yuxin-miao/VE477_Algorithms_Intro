@@ -3,6 +3,26 @@
 #include <sstream>
 #include <algorithm>
 using namespace std;
+/**
+ * @brief 11.23 HW机考第三题 300pt
+ * 输入几个工作，每个工作需要的工作量
+ * 输入几个员工，每个员工可以完成的工作量
+ * 输入有X个实习生，每个实习生可以完成的工作量Y
+ * 每个员工最多可以有一个实习生辅助
+ * 输出最多能有多少个工作被完成
+ * 
+ * Example:
+ * INPUT:
+ * 3
+ * 10 30 40 
+ * 5
+ * 5 10 20 20 5 
+ * 2
+ * 10
+ * OUTPUT:
+ * 2
+ *  @return int 
+ */
 
 int main() {
   // INPUT
